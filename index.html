@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="FAST‑DIPS">
+  <meta name="keywords" content="FAST-DIPS, diffusion model, inverse problem, ">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FAST‑DIPS: Adjoint‑Free Analytic Steps and Hard‑Constrained Likelihood Correction for Diffusion‑Prior Inverse Problems</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/favicon.svg">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">FAST‑DIPS: Adjoint‑Free Analytic Steps and Hard‑Constrained Likelihood Correction for Diffusion‑Prior Inverse Problems</h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://ququlza.github.io/">Minwoo Kim</a><sup>*</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://seunghyeok0715.github.io/">Seunghyeok Shin</a><sup>*</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://milab-inha.github.io//">Hongki Lim</a>
+            </span>
+            <p class="equal-note"><sup>*</sup> These authors contributed equally.</p>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">Inha University</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href="https://arxiv.org/pdf/2603.01591"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/2603.01591"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="https://github.com/ququlza/FAST-DIPS"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span>
+              <!-- Openreview Link. -->
+              <span class="link-block">
+                <a href="https://openreview.net/forum?id=voMeZVAkKL"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-link"></i>
+                  </span>
+                  <span>Openreview</span>
+                  </a>
+              </span>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <img id="teaser" src="./static/images/main_figure.jpg" alt="FAST-DIPS main figure" style="width: 100%; height: 100%; object-fit: cover;">
+      <h2 class="subtitle has-text-centered">
+        <span class="fast-dips">FAST-DIPS</span> is a training-free diffusion-prior solver for inverse problems, combining hard-constrained likelihood correction with adjoint-free analytic updates for fast and stable restoration across linear and nonlinear settings.
+      </h2>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Training-free diffusion priors provide a flexible route for solving inverse problems 
+            without retraining, but existing approaches often become slow when nonlinear forward 
+            operators require repeated derivative evaluations, inner optimization, or MCMC-style 
+            correction loops. FAST-DIPS addresses this bottleneck by replacing expensive inner 
+            procedures with a hard measurement-space feasibility constraint and an analytic step-size 
+            rule tailored to each correction step. Starting from the denoiser prediction, the method 
+            performs an adjoint-free ADMM-style likelihood correction with closed-form projection, 
+            a small number of steepest-descent updates, backtracking, and decoupled re-annealing. 
+            The framework also extends naturally to latent diffusion and introduces a one-switch 
+            pixel-to-latent hybrid schedule to balance efficiency and fidelity. Across a wide range 
+            of linear and nonlinear inverse problems, FAST-DIPS achieves competitive reconstruction 
+            quality while substantially reducing run-time, without requiring hand-crafted adjoints or inner MCMC.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Method</h2>
+        <div class="content has-text-justified">
+          <p>
+            At each diffusion step, FAST-DIPS first computes a denoiser anchor, then applies 
+            a measurement-aware correction under an explicit feasibility constraint, and finally 
+            re-anneals to the next noise level. The correction is solved with an ADMM-style 
+            splitting procedure: the measurement variable is updated by closed-form projection, 
+            while the image variable is refined using an analytic step size derived from a local 
+            quadratic model. This design removes the need for hand-coded adjoints, avoids long 
+            inner correction loops, and keeps the per-step computation lightweight. In addition, 
+            the latent extension and pixel-to-latent hybrid schedule reduce unnecessary decoder-side 
+            overhead while preserving manifold-consistent reconstructions in later stages.
+          </p>
+          <img src="./static/images/method_figure.jpg" alt="FAST-DIPS method figure" style="width: 100%; height: auto;">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Experimental Results</h2>
+        <div class="content has-text-justified">
+          <h3 class="title is-4">Quantitative Evaluation</h3>
+          <p>
+            We evaluate FAST-DIPS on 100 FFHQ images and 100 ImageNet images across eight inverse problems, 
+            including both linear and nonlinear settings. The experiments report PSNR, SSIM, LPIPS, and run-time 
+            for pixel-space and latent-space variants, comparing against recent diffusion-based baselines. 
+            Overall, FAST-DIPS delivers competitive or better reconstruction quality while dramatically reducing 
+            computation, with especially strong efficiency gains in deblurring and phase retrieval tasks.
+          </p>
+          <img src="./static/images/quantitative_table.jpg" alt="FAST-DIPS quantitative results table" style="width: 100%; height: auto;">
+
+          <h3 class="title is-4">Runtime–Quality Tradeoff</h3>
+          <p>
+            To make the speed advantage explicit, we also compare reconstruction quality against average per-image 
+            run-time under matched compute budgets. The trend is consistent across Gaussian deblurring, motion 
+            deblurring, random inpainting, and phase retrieval: FAST-DIPS improves steadily as more compute is 
+            allocated, while maintaining a clear advantage over competing methods in the practical low-to-mid run-time regime.
+          </p>
+          <img src="./static/images/runtime_tradeoff.jpg" alt="FAST-DIPS runtime quality tradeoff" style="width: 100%; height: auto;">
+
+          <h3 class="title is-4">Qualitative Results</h3>
+          <p>
+            The visual comparisons below highlight the behavior of FAST-DIPS across representative inverse 
+            problems. Even in challenging settings such as phase retrieval, random inpainting, and high dynamic 
+            range reconstruction, the method recovers perceptually convincing results while preserving strong structural consistency.
+          </p>
+          <img src="./static/images/main_figure.jpg" alt="FAST-DIPS qualitative results" style="width: 100%; height: auto;">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@inproceedings{kim2026fastdips,
+  author    = {Minwoo Kim and Seunghyeok Shin and Hongki Lim},
+  title     = {FAST-DIPS: Adjoint-Free Analytic Steps and Hard-Constrained Likelihood Correction for Diffusion-Prior Inverse Problems},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year      = {2026}
+}</code></pre>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="content has-text-centered">
+      <a class="icon-link" href="./static/pdfs/fast-dips.pdf">
+        <i class="fas fa-file-pdf"></i>
+      </a>
+      <a class="icon-link" href="#" class="external-link" disabled>
+        <i class="fab fa-github"></i>
+      </a>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            This website is licensed under a
+            <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">
+              Creative Commons Attribution-ShareAlike 4.0 International License
+            </a>.
+          </p>
+          <p>
+            This website template is adapted from the
+            <a href="https://github.com/nerfies/nerfies.github.io">Nerfies project page source</a>.
+            Please remove analytics or external integrations that are not needed for your deployment.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
