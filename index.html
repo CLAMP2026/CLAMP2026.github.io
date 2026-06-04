@@ -1,44 +1,91 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="description"
-        content="FAST‑DIPS">
-  <meta name="keywords" content="FAST-DIPS, diffusion model, inverse problem, ">
+  <meta name="description" content="CLAMP: Geometry-Correct Diffusion Posterior Sampling with Denoiser-Pullback Curvature Guidance and Manifold-Aligned Damping">
+  <meta name="keywords" content="CLAMP, diffusion posterior sampling, inverse problems, denoiser pullback, Gauss-Newton, Langevin, MRI reconstruction, FFHQ, ImageNet">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>FAST‑DIPS: Adjoint‑Free Analytic Steps and Hard‑Constrained Likelihood Correction for Diffusion‑Prior Inverse Problems</title>
+  <title>CLAMP: Geometry-Correct Diffusion Posterior Sampling</title>
 
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-
-    function gtag() {
-      dataLayer.push(arguments);
-    }
-
-    gtag('js', new Date());
-
-    gtag('config', 'G-PYVRSFMDRL');
-  </script>
-
-  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
-        rel="stylesheet">
-
-  <link rel="stylesheet" href="./static/css/bulma.min.css">
-  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
-  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
-  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
-  <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
-  <link rel="stylesheet" href="./static/css/index.css">
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
   <link rel="icon" href="./static/images/favicon.svg">
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script defer src="./static/js/fontawesome.all.min.js"></script>
-  <script src="./static/js/bulma-carousel.min.js"></script>
-  <script src="./static/js/bulma-slider.min.js"></script>
-  <script src="./static/js/index.js"></script>
+  <style>
+    body {
+      font-family: "Noto Sans", Arial, sans-serif;
+    }
+
+    .publication-title {
+      font-family: "Google Sans", "Noto Sans", Arial, sans-serif;
+      line-height: 1.12;
+      letter-spacing: -0.015em;
+    }
+
+    .publication-authors {
+      margin-top: 0.8rem;
+    }
+
+    .author-block {
+      display: inline-block;
+      margin: 0 0.12rem;
+    }
+
+    .equal-note {
+      margin-top: 0.35rem;
+      font-size: 0.95rem;
+    }
+
+    .publication-links {
+      margin-top: 1.1rem;
+    }
+
+    .clamp-name {
+      font-weight: 700;
+      letter-spacing: 0.01em;
+    }
+
+    .hero.teaser {
+      padding-top: 0.5rem;
+    }
+
+    .paper-figure {
+      width: 100%;
+      height: auto;
+      border-radius: 6px;
+    }
+
+    .figure-caption {
+      margin-top: 0.75rem;
+      font-size: 0.95rem;
+      line-height: 1.45;
+      text-align: center;
+    }
+
+    .method-card {
+      height: 100%;
+      padding: 1.15rem;
+      border: 1px solid #e8e8e8;
+      border-radius: 12px;
+      background: #fff;
+    }
+
+    .method-card .title {
+      margin-bottom: 0.55rem;
+    }
+
+    .results-table th,
+    .results-table td {
+      text-align: center !important;
+      vertical-align: middle !important;
+    }
+
+    pre code {
+      white-space: pre-wrap;
+    }
+  </style>
 </head>
 <body>
 
@@ -47,66 +94,38 @@
     <div class="container is-max-desktop">
       <div class="columns is-centered">
         <div class="column has-text-centered">
-          <h1 class="title is-1 publication-title">FAST‑DIPS: Adjoint‑Free Analytic Steps and Hard‑Constrained Likelihood Correction for Diffusion‑Prior Inverse Problems</h1>
+          <h1 class="title is-1 publication-title">
+            CLAMP: Geometry-Correct Diffusion Posterior Sampling with Denoiser-Pullback Curvature Guidance and Manifold-Aligned Damping
+          </h1>
+
           <div class="is-size-5 publication-authors">
-            <span class="author-block">
-              <a href="https://ququlza.github.io/">Minwoo Kim</a><sup>*</sup>,
-            </span>
-            <span class="author-block">
-              <a href="https://seunghyeok0715.github.io/">Seunghyeok Shin</a><sup>*</sup>,
-            </span>
-            <span class="author-block">
-              <a href="https://milab-inha.github.io//">Hongki Lim</a>
-            </span>
-            <p class="equal-note"><sup>*</sup> These authors contributed equally.</p>
+            <span class="author-block"><a href="https://seunghyeok0715.github.io/">Seunghyeok Shin</a><sup>*</sup>,</span>
+            <span class="author-block"><a href="https://ququlza.github.io/">Minwoo Kim</a><sup>*</sup>,</span>
+            <span class="author-block">Dabin Kim,</span>
+            <span class="author-block"><a href="https://milab-inha.github.io/">Hongki Lim</a></span>
+            <p class="equal-note"><sup>*</sup> Equal contribution.</p>
           </div>
 
           <div class="is-size-5 publication-authors">
             <span class="author-block">Inha University</span>
           </div>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">ICML 2026</span>
+          </div>
 
-          <div class="column has-text-centered">
-            <div class="publication-links">
-              <!-- PDF Link. -->
-              <span class="link-block">
-                <a href="https://arxiv.org/pdf/2603.01591"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="fas fa-file-pdf"></i>
-                  </span>
-                  <span>Paper</span>
-                </a>
-              </span>
-              <span class="link-block">
-                <a href="https://arxiv.org/abs/2603.01591"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="ai ai-arxiv"></i>
-                  </span>
-                  <span>arXiv</span>
-                </a>
-              </span>
-              <!-- Code Link. -->
-              <span class="link-block">
-                <a href="https://github.com/ququlza/FAST-DIPS"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="fab fa-github"></i>
-                  </span>
-                  <span>Code</span>
-                  </a>
-              </span>
-              <!-- Openreview Link. -->
-              <span class="link-block">
-                <a href="https://openreview.net/forum?id=voMeZVAkKL"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="fas fa-link"></i>
-                  </span>
-                  <span>Openreview</span>
-                  </a>
-              </span>
-
+          <div class="publication-links">
+            <span class="link-block">
+              <a href="./static/pdfs/clamp.pdf" class="external-link button is-normal is-rounded is-dark">
+                <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                <span>Paper</span>
+              </a>
+            </span>
+            <span class="link-block">
+              <a href="https://github.com/Seunghyeok0715/CLAMP" class="external-link button is-normal is-rounded is-dark">
+                <span class="icon"><i class="fab fa-github"></i></span>
+                <span>Code</span>
+              </a>
+            </span>
           </div>
         </div>
       </div>
@@ -117,9 +136,9 @@
 <section class="hero teaser">
   <div class="container is-max-desktop">
     <div class="hero-body">
-      <img id="teaser" src="./static/images/main_figure.jpg" alt="FAST-DIPS main figure" style="width: 100%; height: 100%; object-fit: cover;">
-      <h2 class="subtitle has-text-centered">
-        <span class="fast-dips">FAST-DIPS</span> is a training-free diffusion-prior solver for inverse problems, combining hard-constrained likelihood correction with adjoint-free analytic updates for fast and stable restoration across linear and nonlinear settings.
+      <img id="teaser" class="paper-figure" src="./static/images/main_figure.jpg" alt="CLAMP qualitative comparisons across phase retrieval, high dynamic range reconstruction, super resolution, box inpainting, and accelerated MRI.">
+      <h2 class="subtitle has-text-centered" style="margin-top: 1rem;">
+        <span class="clamp-name">CLAMP</span> is a training-free diffusion posterior sampler that replaces hand-tuned scalar likelihood guidance with denoiser-pullback, curvature-scaled corrections and variance-preserving Langevin propagation.
       </h2>
     </div>
   </div>
@@ -132,18 +151,7 @@
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
           <p>
-            Training-free diffusion priors provide a flexible route for solving inverse problems 
-            without retraining, but existing approaches often become slow when nonlinear forward 
-            operators require repeated derivative evaluations, inner optimization, or MCMC-style 
-            correction loops. FAST-DIPS addresses this bottleneck by replacing expensive inner 
-            procedures with a hard measurement-space feasibility constraint and an analytic step-size 
-            rule tailored to each correction step. Starting from the denoiser prediction, the method 
-            performs an adjoint-free ADMM-style likelihood correction with closed-form projection, 
-            a small number of steepest-descent updates, backtracking, and decoupled re-annealing. 
-            The framework also extends naturally to latent diffusion and introduces a one-switch 
-            pixel-to-latent hybrid schedule to balance efficiency and fidelity. Across a wide range 
-            of linear and nonlinear inverse problems, FAST-DIPS achieves competitive reconstruction 
-            quality while substantially reducing run-time, without requiring hand-crafted adjoints or inner MCMC.
+            Diffusion posterior sampling conditions pretrained diffusion priors on measurements, but conventional data-consistency updates often depend on hand-tuned scalar guidance weights. Such scalar updates can become unstable when inverse problems have stiff, operator-dependent curvature, especially for nonlinear forward models or latent parameterizations. CLAMP addresses this failure mode with a per-noise-level damped Gauss&ndash;Newton correction computed in diffusion-state coordinates. The correction pulls likelihood gradients back through the denoiser, uses a one-sided curvature model that avoids forward denoiser-Jacobian products, and stabilizes the update with manifold-aligned anisotropic damping. Each correction is solved by a fixed-budget matrix-free GMRES routine, then propagated with a variance-preserving Langevin transition. Across FFHQ, ImageNet, and accelerated MRI reconstruction, CLAMP achieves a strong quality&ndash;runtime trade-off in both pixel and latent settings.
           </p>
         </div>
       </div>
@@ -158,17 +166,50 @@
         <h2 class="title is-3">Method</h2>
         <div class="content has-text-justified">
           <p>
-            At each diffusion step, FAST-DIPS first computes a denoiser anchor, then applies 
-            a measurement-aware correction under an explicit feasibility constraint, and finally 
-            re-anneals to the next noise level. The correction is solved with an ADMM-style 
-            splitting procedure: the measurement variable is updated by closed-form projection, 
-            while the image variable is refined using an analytic step size derived from a local 
-            quadratic model. This design removes the need for hand-coded adjoints, avoids long 
-            inner correction loops, and keeps the per-step computation lightweight. In addition, 
-            the latent extension and pixel-to-latent hybrid schedule reduce unnecessary decoder-side 
-            overhead while preserving manifold-consistent reconstructions in later stages.
+            At each noise level, CLAMP first queries the denoiser to obtain a clean prediction and evaluates the composed measurement residual. Instead of moving along a scalar-scaled likelihood gradient, it forms a denoiser-pullback likelihood signal in diffusion-state coordinates and solves a damped Gauss&ndash;Newton system. The curvature operator keeps the adjoint denoiser pullback for coordinate-correct directions while avoiding expensive forward denoiser-Jacobian products inside curvature matrix-vector products. A rank-one damping metric aligned with the denoiser residual provides prior-aware step control, and the regularization strength is automatically scaled from the diffusion noise level and residual magnitudes.
           </p>
-          <img src="./static/images/method_figure.jpg" alt="FAST-DIPS method figure" style="width: 100%; height: auto;">
+          <p>
+            The resulting correction is computed matrix-free using Jacobian-vector and vector-Jacobian products, so the method applies to linear and differentiable nonlinear forward operators. After the correction, CLAMP advances to the next noise level with a closed-form variance-preserving Langevin step. In latent space, the same update is used after replacing the forward operator with its decoder-composed version.
+          </p>
+          <img class="paper-figure" src="./static/images/method_figure.jpg" alt="Diagram of the CLAMP update: residual direction, composed residual, likelihood pullback, damped Gauss-Newton correction, GMRES solve, and variance-preserving Langevin step.">
+          <p class="figure-caption">
+            CLAMP update at one noise level: compute a denoised prediction, pull measurement sensitivity back through the denoiser, solve a prior-damped matrix-free correction, and propagate with a variance-preserving Langevin transition.
+          </p>
+        </div>
+
+        <div class="columns is-multiline has-text-left" style="margin-top: 1.5rem;">
+          <div class="column is-half">
+            <div class="method-card">
+              <h3 class="title is-5">Denoiser-pullback guidance</h3>
+              <p>
+                Likelihood information is mapped from clean-image coordinates back to the noisy diffusion state through the denoiser, preventing clean-space gradients from being mis-scaled when the denoiser is anisotropic.
+              </p>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div class="method-card">
+              <h3 class="title is-5">Curvature-scaled correction</h3>
+              <p>
+                A damped Gauss&ndash;Newton model allocates step sizes direction-wise, reducing the brittleness of a single scalar guidance weight under stiff local measurement geometry.
+              </p>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div class="method-card">
+              <h3 class="title is-5">Manifold-aligned damping</h3>
+              <p>
+                A residual-aligned rank-one metric regularizes sensitive directions indicated by the diffusion prior, with automatic scaling across noise levels.
+              </p>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div class="method-card">
+              <h3 class="title is-5">Matrix-free implementation</h3>
+              <p>
+                Fixed-budget GMRES uses only Jacobian actions, making CLAMP practical for pixel-space restoration, latent diffusion, nonlinear operators, and accelerated MRI.
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -181,32 +222,61 @@
       <div class="column is-full-width">
         <h2 class="title is-3">Experimental Results</h2>
         <div class="content has-text-justified">
-          <h3 class="title is-4">Quantitative Evaluation</h3>
+          <h3 class="title is-4">Quantitative Evaluation on FFHQ and ImageNet</h3>
           <p>
-            We evaluate FAST-DIPS on 100 FFHQ images and 100 ImageNet images across eight inverse problems, 
-            including both linear and nonlinear settings. The experiments report PSNR, SSIM, LPIPS, and run-time 
-            for pixel-space and latent-space variants, comparing against recent diffusion-based baselines. 
-            Overall, FAST-DIPS delivers competitive or better reconstruction quality while dramatically reducing 
-            computation, with especially strong efficiency gains in deblurring and phase retrieval tasks.
+            CLAMP is evaluated on 100 validation images from FFHQ and 100 validation images from ImageNet across eight inverse-problem tasks, including super resolution, inpainting, deblurring, phase retrieval, nonlinear deblurring, and high dynamic range reconstruction. The tables report PSNR, SSIM, LPIPS, and per-image run-time. Overall, CLAMP is competitive or leading on reconstruction quality while offering a favorable run-time profile against iterative diffusion-based baselines.
           </p>
-          <img src="./static/images/quantitative_table.jpg" alt="FAST-DIPS quantitative results table" style="width: 100%; height: auto;">
 
-          <h3 class="title is-4">Runtime–Quality Tradeoff</h3>
-          <p>
-            To make the speed advantage explicit, we also compare reconstruction quality against average per-image 
-            run-time under matched compute budgets. The trend is consistent across Gaussian deblurring, motion 
-            deblurring, random inpainting, and phase retrieval: FAST-DIPS improves steadily as more compute is 
-            allocated, while maintaining a clear advantage over competing methods in the practical low-to-mid run-time regime.
+          <h4 class="title is-5">Pixel-space setting</h4>
+          <img class="paper-figure" src="./static/images/pixel_table.png" alt="Pixel-space quantitative comparison on FFHQ and ImageNet across inverse-problem tasks.">
+          <p class="figure-caption">
+            Pixel-space results across FFHQ and ImageNet. Higher PSNR/SSIM and lower LPIPS/run-time are better.
           </p>
-          <img src="./static/images/runtime_tradeoff.jpg" alt="FAST-DIPS runtime quality tradeoff" style="width: 100%; height: auto;">
 
-          <h3 class="title is-4">Qualitative Results</h3>
-          <p>
-            The visual comparisons below highlight the behavior of FAST-DIPS across representative inverse 
-            problems. Even in challenging settings such as phase retrieval, random inpainting, and high dynamic 
-            range reconstruction, the method recovers perceptually convincing results while preserving strong structural consistency.
+          <h4 class="title is-5" style="margin-top: 2rem;">Latent-space setting</h4>
+          <img class="paper-figure" src="./static/images/latent_table.png" alt="Latent-space quantitative comparison on FFHQ and ImageNet across inverse-problem tasks.">
+          <p class="figure-caption">
+            Latent-space results across FFHQ and ImageNet, comparing CLAMP with PSLD, ReSample, and LatentDAPS variants.
           </p>
-          <img src="./static/images/main_figure.jpg" alt="FAST-DIPS qualitative results" style="width: 100%; height: auto;">
+
+          <h3 class="title is-4" style="margin-top: 2rem;">Accelerated MRI Reconstruction</h3>
+          <p>
+            CLAMP also extends beyond natural-image inverse problems. On multi-coil accelerated MRI reconstruction with Poisson-disc undersampling, it obtains the best PSNR and SSIM among the compared diffusion-based baselines at both acceleration factors.
+          </p>
+          <div class="table-container">
+            <table class="table is-bordered is-striped is-fullwidth results-table">
+              <thead>
+                <tr>
+                  <th rowspan="2">Method</th>
+                  <th colspan="2">&times;4</th>
+                  <th colspan="2">&times;8</th>
+                </tr>
+                <tr>
+                  <th>PSNR &uarr;</th>
+                  <th>SSIM &uarr;</th>
+                  <th>PSNR &uarr;</th>
+                  <th>SSIM &uarr;</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>DPS</td><td>25.46</td><td>0.531</td><td>25.40</td><td>0.527</td></tr>
+                <tr><td>DAPS</td><td>30.20</td><td>0.687</td><td>28.19</td><td>0.582</td></tr>
+                <tr><td>DDS</td><td>32.07</td><td>0.763</td><td>30.03</td><td>0.669</td></tr>
+                <tr><td>Score-Med</td><td>32.21</td><td>0.776</td><td>30.29</td><td>0.694</td></tr>
+                <tr><td><strong>Ours</strong></td><td><strong>34.05</strong></td><td><strong>0.834</strong></td><td><strong>32.27</strong></td><td><strong>0.766</strong></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <img class="paper-figure" src="./static/images/mri_figure.png" alt="Qualitative MRI reconstruction comparison showing ground truth and reconstructions from DPS, DAPS, DDS, Score-Med, and CLAMP.">
+          <p class="figure-caption">
+            Qualitative MRI comparison. CLAMP preserves fine anatomical structure and improves PSNR over the displayed baselines.
+          </p>
+
+          <h3 class="title is-4" style="margin-top: 2rem;">Qualitative Results</h3>
+          <p>
+            The visual comparisons highlight CLAMP across pixel and latent variants, linear and nonlinear forward models, and natural and medical imaging domains. The method reduces artifacts while preserving measurement consistency and perceptual fidelity.
+          </p>
+          <img class="paper-figure" src="./static/images/main_figure.jpg" alt="CLAMP qualitative results on multiple inverse-problem tasks.">
         </div>
       </div>
     </div>
@@ -216,11 +286,14 @@
 <section class="section" id="BibTeX">
   <div class="container is-max-desktop content">
     <h2 class="title">BibTeX</h2>
-    <pre><code>@inproceedings{kim2026fastdips,
-  author    = {Minwoo Kim and Seunghyeok Shin and Hongki Lim},
-  title     = {FAST-DIPS: Adjoint-Free Analytic Steps and Hard-Constrained Likelihood Correction for Diffusion-Prior Inverse Problems},
-  booktitle = {International Conference on Learning Representations (ICLR)},
-  year      = {2026}
+    <pre><code>@inproceedings{shin2026clamp,
+  author    = {Seunghyeok Shin and Minwoo Kim and Dabin Kim and Hongki Lim},
+  title     = {Geometry-Correct Diffusion Posterior Sampling with Denoiser-Pullback Curvature Guidance and Manifold-Aligned Damping},
+  booktitle = {Proceedings of the 43rd International Conference on Machine Learning},
+  series    = {Proceedings of Machine Learning Research},
+  volume    = {306},
+  year      = {2026},
+  publisher = {PMLR}
 }</code></pre>
   </div>
 </section>
@@ -228,10 +301,10 @@
 <footer class="footer">
   <div class="container">
     <div class="content has-text-centered">
-      <a class="icon-link" href="./static/pdfs/fast-dips.pdf">
+      <a class="icon-link" href="./static/pdfs/clamp.pdf" aria-label="Paper PDF">
         <i class="fas fa-file-pdf"></i>
       </a>
-      <a class="icon-link" href="#" class="external-link" disabled>
+      <a class="icon-link" href="https://github.com/Seunghyeok0715/CLAMP" aria-label="Code repository">
         <i class="fab fa-github"></i>
       </a>
     </div>
@@ -239,18 +312,14 @@
       <div class="column is-8">
         <div class="content">
           <p>
-            This website is licensed under a
-            <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">
-              Creative Commons Attribution-ShareAlike 4.0 International License
-            </a>.
-          </p>
-          <p>
             This website template is adapted from the
             <a href="https://github.com/nerfies/nerfies.github.io">Nerfies project page source</a>.
-            Please remove analytics or external integrations that are not needed for your deployment.
           </p>
         </div>
       </div>
     </div>
   </div>
 </footer>
+
+</body>
+</html>
