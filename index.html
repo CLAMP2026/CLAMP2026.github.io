@@ -1,91 +1,44 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
   <meta charset="utf-8">
-  <meta name="description" content="CLAMP: Geometry-Correct Diffusion Posterior Sampling with Denoiser-Pullback Curvature Guidance and Manifold-Aligned Damping">
+  <meta name="descript
+        content="CLAMP: Geometry-Correct Diffusion Posterior Sampling with Denoiser-Pullback Curvature Guidance and Manifold-Aligned Damping">
   <meta name="keywords" content="CLAMP, diffusion posterior sampling, inverse problems, denoiser pullback, Gauss-Newton, Langevin, MRI reconstruction, FFHQ, ImageNet">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>CLAMP: Geometry-Correct Diffusion Posterior Sampling</title>
 
-  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
   <link rel="icon" href="./static/images/favicon.svg">
 
-  <style>
-    body {
-      font-family: "Noto Sans", Arial, sans-serif;
-    }
-
-    .publication-title {
-      font-family: "Google Sans", "Noto Sans", Arial, sans-serif;
-      line-height: 1.12;
-      letter-spacing: -0.015em;
-    }
-
-    .publication-authors {
-      margin-top: 0.8rem;
-    }
-
-    .author-block {
-      display: inline-block;
-      margin: 0 0.12rem;
-    }
-
-    .equal-note {
-      margin-top: 0.35rem;
-      font-size: 0.95rem;
-    }
-
-    .publication-links {
-      margin-top: 1.1rem;
-    }
-
-    .clamp-name {
-      font-weight: 700;
-      letter-spacing: 0.01em;
-    }
-
-    .hero.teaser {
-      padding-top: 0.5rem;
-    }
-
-    .paper-figure {
-      width: 100%;
-      height: auto;
-      border-radius: 6px;
-    }
-
-    .figure-caption {
-      margin-top: 0.75rem;
-      font-size: 0.95rem;
-      line-height: 1.45;
-      text-align: center;
-    }
-
-    .method-card {
-      height: 100%;
-      padding: 1.15rem;
-      border: 1px solid #e8e8e8;
-      border-radius: 12px;
-      background: #fff;
-    }
-
-    .method-card .title {
-      margin-bottom: 0.55rem;
-    }
-
-    .results-table th,
-    .results-table td {
-      text-align: center !important;
-      vertical-align: middle !important;
-    }
-
-    pre code {
-      white-space: pre-wrap;
-    }
-  </style>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
 </head>
 <body>
 
@@ -94,51 +47,67 @@
     <div class="container is-max-desktop">
       <div class="columns is-centered">
         <div class="column has-text-centered">
-          <h1 class="title is-1 publication-title">
-            CLAMP: Geometry-Correct Diffusion Posterior Sampling with Denoiser-Pullback Curvature Guidance and Manifold-Aligned Damping
-          </h1>
-
+          <h1 class="title is-1 publication-title">CLAMP: Geometry-Correct Diffusion Posterior Sampling with Denoiser-Pullback Curvature Guidance and Manifold-Aligned Damping</h1>
           <div class="is-size-5 publication-authors">
-            <span class="author-block"><a href="https://seunghyeok0715.github.io/">Seunghyeok Shin</a><sup>*</sup>,</span>
-            <span class="author-block"><a href="https://ququlza.github.io/">Minwoo Kim</a><sup>*</sup>,</span>
-            <span class="author-block">Dabin Kim,</span>
-            <span class="author-block"><a href="https://milab-inha.github.io/">Hongki Lim</a></span>
+            <span class="author-block">
+              <a href="https://seunghyeok0715.github.io/">Seunghyeok Shin</a><sup>*</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://ququlza.github.io/">Minwoo Kim</a><sup>*</sup>,
+            </span>
+            <span class="author-block">
+              Dabin Kim,
+            </span>
+            <span class="author-block">
+              <a href="https://milab-inha.github.io/">Hongki Lim</a>
+            </span>
             <p class="equal-note"><sup>*</sup> Equal contribution.</p>
           </div>
 
           <div class="is-size-5 publication-authors">
             <span class="author-block">Inha University</span>
           </div>
+
           <div class="is-size-5 publication-authors">
             <span class="author-block">ICML 2026</span>
           </div>
 
-          <div class="publication-links">
-            <span class="link-block">
-              <a href="./static/pdfs/clamp.pdf" class="external-link button is-normal is-rounded is-dark">
-                <span class="icon"><i class="fas fa-file-pdf"></i></span>
-                <span>Paper</span>
-              </a>
-            </span>
-            <span class="link-block">
-              <a href="https://github.com/Seunghyeok0715/CLAMP" class="external-link button is-normal is-rounded is-dark">
-                <span class="icon"><i class="fab fa-github"></i></span>
-                <span>Code</span>
-              </a>
-            </span>
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href="./static/pdfs/clamp.pdf"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="https://github.com/Seunghyeok0715/CLAMP"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span>
           </div>
         </div>
       </div>
     </div>
   </div>
-</section>
+</se  </div>
+ction>
 
 <section class="hero teaser">
   <div class="container is-max-desktop">
     <div class="hero-body">
-      <img id="teaser" class="paper-figure" src="./static/images/main_figure.jpg" alt="CLAMP qualitative comparisons across phase retrieval, high dynamic range reconstruction, super resolution, box inpainting, and accelerated MRI.">
-      <h2 class="subtitle has-text-centered" style="margin-top: 1rem;">
-        <span class="clamp-name">CLAMP</span> is a training-free diffusion posterior sampler that replaces hand-tuned scalar likelihood guidance with denoiser-pullback, curvature-scaled corrections and variance-preserving Langevin propagation.
+      <img id="teaser" src="./static/images/main_figure.jpg" alt="CLAMP qualitative comparisons across phase retrieval, high dynamic range reconstruction, super resolution, box inpainting, and accelerated MRI." style="width: 100%; height: 100%; object-fit: cover;">
+      <h2 class="subtitle has-text-centered">
+        <span class="dnerf">CLAMP</span> is a training-free diffusion posterior sampler that replaces hand-tuned scalar likelihood guidance with denoiser-pullback, curvature-scaled corrections and variance-preserving Langevin propagation.
       </h2>
     </div>
   </div>
@@ -171,45 +140,7 @@
           <p>
             The resulting correction is computed matrix-free using Jacobian-vector and vector-Jacobian products, so the method applies to linear and differentiable nonlinear forward operators. After the correction, CLAMP advances to the next noise level with a closed-form variance-preserving Langevin step. In latent space, the same update is used after replacing the forward operator with its decoder-composed version.
           </p>
-          <img class="paper-figure" src="./static/images/method_figure.jpg" alt="Diagram of the CLAMP update: residual direction, composed residual, likelihood pullback, damped Gauss-Newton correction, GMRES solve, and variance-preserving Langevin step.">
-          <p class="figure-caption">
-            CLAMP update at one noise level: compute a denoised prediction, pull measurement sensitivity back through the denoiser, solve a prior-damped matrix-free correction, and propagate with a variance-preserving Langevin transition.
-          </p>
-        </div>
-
-        <div class="columns is-multiline has-text-left" style="margin-top: 1.5rem;">
-          <div class="column is-half">
-            <div class="method-card">
-              <h3 class="title is-5">Denoiser-pullback guidance</h3>
-              <p>
-                Likelihood information is mapped from clean-image coordinates back to the noisy diffusion state through the denoiser, preventing clean-space gradients from being mis-scaled when the denoiser is anisotropic.
-              </p>
-            </div>
-          </div>
-          <div class="column is-half">
-            <div class="method-card">
-              <h3 class="title is-5">Curvature-scaled correction</h3>
-              <p>
-                A damped Gauss&ndash;Newton model allocates step sizes direction-wise, reducing the brittleness of a single scalar guidance weight under stiff local measurement geometry.
-              </p>
-            </div>
-          </div>
-          <div class="column is-half">
-            <div class="method-card">
-              <h3 class="title is-5">Manifold-aligned damping</h3>
-              <p>
-                A residual-aligned rank-one metric regularizes sensitive directions indicated by the diffusion prior, with automatic scaling across noise levels.
-              </p>
-            </div>
-          </div>
-          <div class="column is-half">
-            <div class="method-card">
-              <h3 class="title is-5">Matrix-free implementation</h3>
-              <p>
-                Fixed-budget GMRES uses only Jacobian actions, making CLAMP practical for pixel-space restoration, latent diffusion, nonlinear operators, and accelerated MRI.
-              </p>
-            </div>
-          </div>
+          <img src="./static/images/method_figure.jpg" alt="Diagram of the CLAMP update: residual direction, composed residual, likelihood pullback, damped Gauss-Newton correction, GMRES solve, and variance-preserving Langevin step." style="width: 100%; height: auto;">
         </div>
       </div>
     </div>
@@ -228,55 +159,22 @@
           </p>
 
           <h4 class="title is-5">Pixel-space setting</h4>
-          <img class="paper-figure" src="./static/images/pixel_table.png" alt="Pixel-space quantitative comparison on FFHQ and ImageNet across inverse-problem tasks.">
-          <p class="figure-caption">
-            Pixel-space results across FFHQ and ImageNet. Higher PSNR/SSIM and lower LPIPS/run-time are better.
-          </p>
+          <img src="./static/images/pixel_table.png" alt="Pixel-space quantitative comparison on FFHQ and ImageNet across inverse-problem tasks." style="width: 100%; height: auto;">
 
-          <h4 class="title is-5" style="margin-top: 2rem;">Latent-space setting</h4>
-          <img class="paper-figure" src="./static/images/latent_table.png" alt="Latent-space quantitative comparison on FFHQ and ImageNet across inverse-problem tasks.">
-          <p class="figure-caption">
-            Latent-space results across FFHQ and ImageNet, comparing CLAMP with PSLD, ReSample, and LatentDAPS variants.
-          </p>
+          <h4 class="title is-5">Latent-space setting</h4>
+          <img src="./static/images/latent_table.png" alt="Latent-space quantitative comparison on FFHQ and ImageNet across inverse-problem tasks." style="width: 100%; height: auto;">
 
-          <h3 class="title is-4" style="margin-top: 2rem;">Accelerated MRI Reconstruction</h3>
+          <h3 class="title is-4">Accelerated MRI Reconstruction</h3>
           <p>
             CLAMP also extends beyond natural-image inverse problems. On multi-coil accelerated MRI reconstruction with Poisson-disc undersampling, it obtains the best PSNR and SSIM among the compared diffusion-based baselines at both acceleration factors.
           </p>
-          <div class="table-container">
-            <table class="table is-bordered is-striped is-fullwidth results-table">
-              <thead>
-                <tr>
-                  <th rowspan="2">Method</th>
-                  <th colspan="2">&times;4</th>
-                  <th colspan="2">&times;8</th>
-                </tr>
-                <tr>
-                  <th>PSNR &uarr;</th>
-                  <th>SSIM &uarr;</th>
-                  <th>PSNR &uarr;</th>
-                  <th>SSIM &uarr;</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr><td>DPS</td><td>25.46</td><td>0.531</td><td>25.40</td><td>0.527</td></tr>
-                <tr><td>DAPS</td><td>30.20</td><td>0.687</td><td>28.19</td><td>0.582</td></tr>
-                <tr><td>DDS</td><td>32.07</td><td>0.763</td><td>30.03</td><td>0.669</td></tr>
-                <tr><td>Score-Med</td><td>32.21</td><td>0.776</td><td>30.29</td><td>0.694</td></tr>
-                <tr><td><strong>Ours</strong></td><td><strong>34.05</strong></td><td><strong>0.834</strong></td><td><strong>32.27</strong></td><td><strong>0.766</strong></td></tr>
-              </tbody>
-            </table>
-          </div>
-          <img class="paper-figure" src="./static/images/mri_figure.png" alt="Qualitative MRI reconstruction comparison showing ground truth and reconstructions from DPS, DAPS, DDS, Score-Med, and CLAMP.">
-          <p class="figure-caption">
-            Qualitative MRI comparison. CLAMP preserves fine anatomical structure and improves PSNR over the displayed baselines.
-          </p>
+          <img src="./static/images/mri_figure.png" alt="Qualitative MRI reconstruction comparison showing ground truth and reconstructions from DPS, DAPS, DDS, Score-Med, and CLAMP." style="width: 100%; height: auto;">
 
-          <h3 class="title is-4" style="margin-top: 2rem;">Qualitative Results</h3>
+          <h3 class="title is-4">Qualitative Results</h3>
           <p>
             The visual comparisons highlight CLAMP across pixel and latent variants, linear and nonlinear forward models, and natural and medical imaging domains. The method reduces artifacts while preserving measurement consistency and perceptual fidelity.
           </p>
-          <img class="paper-figure" src="./static/images/main_figure.jpg" alt="CLAMP qualitative results on multiple inverse-problem tasks.">
+          <img src="./static/images/main_figure.jpg" alt="CLAMP qualitative results on multiple inverse-problem tasks." style="width: 100%; height: auto;">
         </div>
       </div>
     </div>
@@ -301,10 +199,10 @@
 <footer class="footer">
   <div class="container">
     <div class="content has-text-centered">
-      <a class="icon-link" href="./static/pdfs/clamp.pdf" aria-label="Paper PDF">
+      <a class="icon-link" href="./static/pdfs/clamp.pdf">
         <i class="fas fa-file-pdf"></i>
       </a>
-      <a class="icon-link" href="https://github.com/Seunghyeok0715/CLAMP" aria-label="Code repository">
+      <a class="icon-link" href="https://github.com/Seunghyeok0715/CLAMP">
         <i class="fab fa-github"></i>
       </a>
     </div>
@@ -312,8 +210,15 @@
       <div class="column is-8">
         <div class="content">
           <p>
+            This website is licensed under a
+            <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">
+              Creative Commons Attribution-ShareAlike 4.0 International License
+            </a>.
+          </p>
+          <p>
             This website template is adapted from the
             <a href="https://github.com/nerfies/nerfies.github.io">Nerfies project page source</a>.
+            Please remove analytics or external integrations that are not needed for your deployment.
           </p>
         </div>
       </div>
@@ -323,3 +228,25 @@
 
 </body>
 </html>
+s://github.com/nerfies/nerfies.github.io">Nerfies project page source</a>.
+            Please remove analytics or external integrations that are not needed for your deployment.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>github.com/nerfies/nerfies.github.io">Nerfies project page source</a>.
+            Please remove analytics or external integrations that are not needed for your deployment.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>ithub.com/nerfies/nerfies.github.io">Nerfies project page source</a>.
+            Please remove analytics or external integrations that are not needed for your deployment.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
