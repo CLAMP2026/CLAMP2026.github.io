@@ -56,7 +56,7 @@
               <a href="https://ququlza.github.io/">Minwoo Kim</a><sup>*</sup>,
             </span>
             <span class="author-block">
-              Dabin Kim,
+              <a href="https://www.linkedin.com/in/학생-전자공학-김다빈-24951a2b8">Dabin Kim</a><sup>*</sup>,
             </span>
             <span class="author-block">
               <a href="https://milab-inha.github.io/">Hongki Lim</a>
@@ -134,13 +134,13 @@ ction>
       <div class="column is-full-width">
         <h2 class="title is-3">Method</h2>
         <div class="content has-text-justified">
+          <img src="./static/images/method_figure.jpg" alt="Diagram of the CLAMP update: residual direction, composed residual, likelihood pullback, damped Gauss-Newton correction, GMRES solve, and variance-preserving Langevin step." style="width: 100%; height: auto;">
           <p>
             At each noise level, CLAMP first queries the denoiser to obtain a clean prediction and evaluates the composed measurement residual. Instead of moving along a scalar-scaled likelihood gradient, it forms a denoiser-pullback likelihood signal in diffusion-state coordinates and solves a damped Gauss&ndash;Newton system. The curvature operator keeps the adjoint denoiser pullback for coordinate-correct directions while avoiding expensive forward denoiser-Jacobian products inside curvature matrix-vector products. A rank-one damping metric aligned with the denoiser residual provides prior-aware step control, and the regularization strength is automatically scaled from the diffusion noise level and residual magnitudes.
           </p>
           <p>
             The resulting correction is computed matrix-free using Jacobian-vector and vector-Jacobian products, so the method applies to linear and differentiable nonlinear forward operators. After the correction, CLAMP advances to the next noise level with a closed-form variance-preserving Langevin step. In latent space, the same update is used after replacing the forward operator with its decoder-composed version.
           </p>
-          <img src="./static/images/method_figure.jpg" alt="Diagram of the CLAMP update: residual direction, composed residual, likelihood pullback, damped Gauss-Newton correction, GMRES solve, and variance-preserving Langevin step." style="width: 100%; height: auto;">
         </div>
       </div>
     </div>
@@ -165,16 +165,16 @@ ction>
           <img src="./static/images/latent_table.png" alt="Latent-space quantitative comparison on FFHQ and ImageNet across inverse-problem tasks." style="width: 100%; height: auto;">
 
           <h3 class="title is-4">Accelerated MRI Reconstruction</h3>
+          <img src="./static/images/mri_figure.png" alt="Qualitative MRI reconstruction comparison showing ground truth and reconstructions from DPS, DAPS, DDS, Score-Med, and CLAMP." style="width: 100%; height: auto;">
           <p>
             CLAMP also extends beyond natural-image inverse problems. On multi-coil accelerated MRI reconstruction with Poisson-disc undersampling, it obtains the best PSNR and SSIM among the compared diffusion-based baselines at both acceleration factors.
           </p>
-          <img src="./static/images/mri_figure.png" alt="Qualitative MRI reconstruction comparison showing ground truth and reconstructions from DPS, DAPS, DDS, Score-Med, and CLAMP." style="width: 100%; height: auto;">
 
           <h3 class="title is-4">Qualitative Results</h3>
+          <img src="./static/images/main_figure.jpg" alt="CLAMP qualitative results on multiple inverse-problem tasks." style="width: 100%; height: auto;">
           <p>
             The visual comparisons highlight CLAMP across pixel and latent variants, linear and nonlinear forward models, and natural and medical imaging domains. The method reduces artifacts while preserving measurement consistency and perceptual fidelity.
           </p>
-          <img src="./static/images/main_figure.jpg" alt="CLAMP qualitative results on multiple inverse-problem tasks." style="width: 100%; height: auto;">
         </div>
       </div>
     </div>
