@@ -92,7 +92,6 @@
       <div class="column"><h3 class="title is-5">A pretrained image prior</h3><p>Start with a diffusion denoiser suited to your image domain. Training-free refers to solving the inverse problem; the prior is already trained.</p></div>
       <div class="column"><h3 class="title is-5">A differentiable measurement model</h3><p>The correction uses operator Jacobian actions and a denoiser pullback. Latent reconstruction also differentiates through the decoder.</p></div>
     </div>
-    <div class="scope-note"><strong>Paper and code scope.</strong> The paper evaluates natural-image reconstruction and accelerated MRI. Release v0.1.0 verifies one FFHQ pixel-space super-resolution run. Latent presets are present, but a complete tested latent installation and MRI reproduction pipeline are not packaged in this release. <a href="#reproduce">See the execution status.</a></div>
     <figure class="research-figure">
       <img src="./static/images/main_figure.jpg" alt="Author-reported qualitative comparisons for CLAMP across phase retrieval, HDR, super-resolution, inpainting, and accelerated MRI." fetchpriority="high" decoding="async">
       <figcaption>Qualitative results reported in the paper. The natural-image and MRI panels use their respective experimental setups.</figcaption>
