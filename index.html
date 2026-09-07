@@ -1,271 +1,362 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="descript
-        content="CLAMP: Geometry-Correct Diffusion Posterior Sampling with Denoiser-Pullback Curvature Guidance and Manifold-Aligned Damping">
-  <meta name="keywords" content="CLAMP, diffusion posterior sampling, inverse problems, denoiser pullback, Gauss-Newton, Langevin, MRI reconstruction, FFHQ, ImageNet">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>CLAMP: Geometry-Correct Diffusion Posterior Sampling</title>
-
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-
-    function gtag() {
-      dataLayer.push(arguments);
-    }
-
-    gtag('js', new Date());
-
-    gtag('config', 'G-PYVRSFMDRL');
+  <title>CLAMP: Training-Free Diffusion Inverse Solver | ICML 2026</title>
+  <meta name="description" content="CLAMP is a training-free diffusion inverse solver with denoiser-pullback curvature and manifold-aligned damping. Explore ICML 2026 results, limitations, and runnable code.">
+  <link rel="canonical" href="https://clamp2026.github.io/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="CLAMP">
+  <meta property="og:title" content="CLAMP: Training-Free Diffusion Inverse Solver | ICML 2026">
+  <meta property="og:description" content="Denoiser-pullback curvature, manifold-aligned damping, and a practical route to diffusion-prior image reconstruction. Paper comparisons and official code.">
+  <meta property="og:url" content="https://clamp2026.github.io/">
+  <meta property="og:image" content="https://clamp2026.github.io/static/images/main_figure.jpg">
+  <meta property="og:image:alt" content="CLAMP reconstruction comparisons on natural-image inverse problems and accelerated MRI.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="CLAMP: Training-Free Diffusion Inverse Solver | ICML 2026">
+  <meta name="twitter:description" content="Paper results, method comparisons, and a verified pixel-space quick start for CLAMP.">
+  <meta name="twitter:image" content="https://clamp2026.github.io/static/images/main_figure.jpg">
+  <meta name="twitter:image:alt" content="CLAMP reconstruction comparisons on natural-image inverse problems and accelerated MRI.">
+  <meta name="citation_title" content="Geometry-Correct Diffusion Posterior Sampling with Denoiser-Pullback Curvature Guidance and Manifold-Aligned Damping">
+  <meta name="citation_author" content="Seunghyeok Shin">
+  <meta name="citation_author" content="Minwoo Kim">
+  <meta name="citation_author" content="Dabin Kim">
+  <meta name="citation_author" content="Hongki Lim">
+  <meta name="citation_publication_date" content="2026">
+  <meta name="citation_conference_title" content="Proceedings of the 43rd International Conference on Machine Learning">
+  <meta name="citation_volume" content="306">
+  <meta name="citation_pdf_url" content="https://arxiv.org/pdf/2605.27990">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ScholarlyArticle",
+    "@id": "https://clamp2026.github.io/#paper",
+    "name": "Geometry-Correct Diffusion Posterior Sampling with Denoiser-Pullback Curvature Guidance and Manifold-Aligned Damping",
+    "alternateName": "CLAMP: Training-Free Diffusion Inverse Solver",
+    "description": "CLAMP uses denoiser-pullback curvature correction and manifold-aligned damping for training-free diffusion-prior inverse solving.",
+    "author": [
+      {"@type": "Person", "name": "Seunghyeok Shin", "url": "https://seunghyeok0715.github.io/"},
+      {"@type": "Person", "name": "Minwoo Kim", "url": "https://ququlza.github.io/"},
+      {"@type": "Person", "name": "Dabin Kim"},
+      {"@type": "Person", "name": "Hongki Lim", "url": "https://milab-inha.github.io/"}
+    ],
+    "url": "https://icml.cc/virtual/2026/poster/60728",
+    "mainEntityOfPage": "https://clamp2026.github.io/",
+    "sameAs": ["https://arxiv.org/abs/2605.27990", "https://openreview.net/forum?id=x9Cy1wydfo"],
+    "isPartOf": {"@type": "PublicationVolume", "volumeNumber": "306", "name": "Proceedings of the 43rd International Conference on Machine Learning", "isPartOf": {"@type": "Periodical", "name": "Proceedings of Machine Learning Research"}},
+    "isAccessibleForFree": true,
+    "image": "https://clamp2026.github.io/static/images/main_figure.jpg"
+  }
   </script>
-
-  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
-        rel="stylesheet">
-
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./static/css/bulma.min.css">
-  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
-  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
-  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
-  <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
   <link rel="stylesheet" href="./static/css/index.css">
-  <link rel="icon" href="./static/images/favicon.svg">
-
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script defer src="./static/js/fontawesome.all.min.js"></script>
-  <script src="./static/js/bulma-carousel.min.js"></script>
-  <script src="./static/js/bulma-slider.min.js"></script>
-  <script src="./static/js/index.js"></script>
+  <script defer src="./static/js/index.js"></script>
 </head>
 <body>
-
-<section class="hero">
+<a class="skip-link" href="#overview">Skip to content</a>
+<header class="hero" id="paper">
   <div class="hero-body">
-    <div class="container is-max-desktop">
-      <div class="columns is-centered">
-        <div class="column has-text-centered">
-          <h1 class="title is-1 publication-title">CLAMP: Geometry-Correct Diffusion Posterior Sampling with Denoiser-Pullback Curvature Guidance and Manifold-Aligned Damping</h1>
-          <div class="is-size-5 publication-authors">
-            <span class="author-block">
-              <a href="https://seunghyeok0715.github.io/">Seunghyeok Shin</a><sup>*</sup>,
-            </span>
-            <span class="author-block">
-              <a href="https://ququlza.github.io/">Minwoo Kim</a><sup>*</sup>,
-            </span>
-            <span class="author-block">
-              <a href="https://www.linkedin.com/in/학생-전자공학-김다빈-24951a2b8">Dabin Kim</a>,
-            </span>
-            <span class="author-block">
-              <a href="https://milab-inha.github.io/">Hongki Lim</a>
-            </span>
-            <p class="equal-note"><sup>*</sup> Equal contribution.</p>
-          </div>
-
-          <div class="is-size-5 publication-authors">
-            <span class="author-block">Inha University</span>
-          </div>
-
-          <div class="is-size-5 publication-authors">
-            <span class="author-block">ICML 2026</span>
-          </div>
-
-          <div class="column has-text-centered">
-            <div class="publication-links">
-              <!-- PDF Link. -->
-              <span class="link-block">
-                <a href="https://arxiv.org/pdf/2605.27990"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="fas fa-file-pdf"></i>
-                  </span>
-                  <span>Paper</span>
-                </a>
-              </span>
-              <span class="link-block">
-                <a href="https://arxiv.org/abs/2605.27990"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="ai ai-arxiv"></i>
-                  </span>
-                  <span>arXiv</span>
-                </a>
-              </span>
-              <!-- Code Link. -->
-              <span class="link-block">
-                <a href="https://github.com/Seunghyeok0715/CLAMP"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="fab fa-github"></i>
-                  </span>
-                  <span>Code</span>
-                  </a>
-              </span>
-              <!-- Openreview Link. -->
-              <span class="link-block">
-                <a href="https://openreview.net/forum?id=x9Cy1wydfo"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="fas fa-link"></i>
-                  </span>
-                  <span>Openreview</span>
-                  </a>
-              </span>
-          </div>
-        </div>
+    <div class="container is-max-desktop has-text-centered">
+      <p class="venue-label">ICML 2026 · Inha University</p>
+      <h1 class="title publication-title">CLAMP <span>Training-Free Diffusion Inverse Solver</span></h1>
+      <p class="official-title">Geometry-Correct Diffusion Posterior Sampling with Denoiser-Pullback Curvature Guidance and Manifold-Aligned Damping</p>
+      <div class="publication-authors">
+        <span class="author-block"><a href="https://seunghyeok0715.github.io/">Seunghyeok Shin</a><sup>*</sup></span>
+        <span class="author-block"><a href="https://ququlza.github.io/">Minwoo Kim</a><sup>*</sup></span>
+        <span class="author-block"><a href="https://www.linkedin.com/in/학생-전자공학-김다빈-24951a2b8">Dabin Kim</a></span>
+        <span class="author-block"><a href="https://milab-inha.github.io/">Hongki Lim</a></span>
       </div>
-    </div>
-  </div>
-</section>
-
-
-<section class="hero teaser">
-  <div class="container is-max-desktop">
-    <div class="hero-body">
-      <img id="teaser" src="./static/images/main_figure.jpg" alt="CLAMP qualitative comparisons across phase retrieval, high dynamic range reconstruction, super resolution, box inpainting, and accelerated MRI." style="width: 100%; height: 100%; object-fit: cover;">
-      <h2 class="subtitle has-text-centered">
-        <span class="dnerf">CLAMP</span> is a training-free diffusion posterior sampler that replaces hand-tuned scalar likelihood guidance with denoiser-pullback, curvature-scaled corrections and variance-preserving Langevin propagation.
-      </h2>
-    </div>
-  </div>
-</section>
-
-<section class="section">
-  <div class="container is-max-desktop">
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3">Abstract</h2>
-        <div class="content has-text-justified">
-          <p>
-            Diffusion posterior sampling conditions pretrained diffusion priors on measurements, but conventional data-consistency updates often depend on hand-tuned scalar guidance weights. Such scalar updates can become unstable when inverse problems have stiff, operator-dependent curvature, especially for nonlinear forward models or latent parameterizations. CLAMP addresses this failure mode with a per-noise-level damped Gauss&ndash;Newton correction computed in diffusion-state coordinates. The correction pulls likelihood gradients back through the denoiser, uses a one-sided curvature model that avoids forward denoiser-Jacobian products, and stabilizes the update with manifold-aligned anisotropic damping. Each correction is solved by a fixed-budget matrix-free GMRES routine, then propagated with a variance-preserving Langevin transition. Across FFHQ, ImageNet, and accelerated MRI reconstruction, CLAMP achieves a strong quality&ndash;runtime trade-off in both pixel and latent settings.
-          </p>
-        </div>
+      <p class="equal-note"><sup>*</sup> Equal contribution.</p>
+      <p class="hero-summary">Reconstruct images with a pretrained diffusion prior.<br>Account for measurement geometry at every noise level.</p>
+      <div class="publication-links">
+        <a class="button is-link is-rounded" href="https://github.com/Seunghyeok0715/CLAMP/releases/tag/v0.1.0">Code · v0.1.0</a>
+        <a class="button is-dark is-rounded" href="https://arxiv.org/pdf/2605.27990">Paper PDF</a>
+        <a class="button is-light is-rounded" href="https://icml.cc/virtual/2026/poster/60728">ICML</a>
+        <a class="button is-light is-rounded" href="https://arxiv.org/abs/2605.27990">arXiv</a>
+        <a class="button is-light is-rounded" href="https://openreview.net/forum?id=x9Cy1wydfo">OpenReview</a>
       </div>
+      <nav class="section-nav" aria-label="On this page">
+        <a href="#overview">When to use CLAMP</a><a href="#method">Method</a><a href="#results">Results</a><a href="#comparison">Comparison</a><a href="#reproduce">Reproduce</a><a href="#BibTeX">Cite</a>
+      </nav>
     </div>
   </div>
-</section>
-
-<section class="section">
-  <div class="container is-max-desktop">
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-full-width">
-        <h2 class="title is-3">Method</h2>
-        <div class="content has-text-justified">
-          <img src="./static/images/method_figure.jpg" alt="Diagram of the CLAMP update: residual direction, composed residual, likelihood pullback, damped Gauss-Newton correction, GMRES solve, and variance-preserving Langevin step." style="width: 100%; height: auto;">
-          <p>
-            At each noise level, CLAMP first queries the denoiser to obtain a clean prediction and evaluates the composed measurement residual. Instead of moving along a scalar-scaled likelihood gradient, it forms a denoiser-pullback likelihood signal in diffusion-state coordinates and solves a damped Gauss&ndash;Newton system. The curvature operator keeps the adjoint denoiser pullback for coordinate-correct directions while avoiding expensive forward denoiser-Jacobian products inside curvature matrix-vector products. A rank-one damping metric aligned with the denoiser residual provides prior-aware step control, and the regularization strength is automatically scaled from the diffusion noise level and residual magnitudes.
-          </p>
-          <p>
-            The resulting correction is computed matrix-free using Jacobian-vector and vector-Jacobian products, so the method applies to linear and differentiable nonlinear forward operators. After the correction, CLAMP advances to the next noise level with a closed-form variance-preserving Langevin step. In latent space, the same update is used after replacing the forward operator with its decoder-composed version.
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="section">
-  <div class="container is-max-desktop">
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-full-width">
-        <h2 class="title is-3">Experimental Results</h2>
-        <div class="content has-text-justified">
-          <h3 class="title is-4">Quantitative Evaluation on FFHQ and ImageNet</h3>
-          <p>
-            CLAMP is evaluated on 100 validation images from FFHQ and 100 validation images from ImageNet across eight inverse-problem tasks, including super resolution, inpainting, deblurring, phase retrieval, nonlinear deblurring, and high dynamic range reconstruction. The tables report PSNR, SSIM, LPIPS, and per-image run-time. Overall, CLAMP is competitive or leading on reconstruction quality while offering a favorable run-time profile against iterative diffusion-based baselines.
-          </p>
-
-          <h4 class="title is-5">Pixel-space setting</h4>
-          <img src="./static/images/pixel_table.png" alt="Pixel-space quantitative comparison on FFHQ and ImageNet across inverse-problem tasks." style="width: 100%; height: auto;">
-
-          <h4 class="title is-5">Latent-space setting</h4>
-          <img src="./static/images/latent_table.png" alt="Latent-space quantitative comparison on FFHQ and ImageNet across inverse-problem tasks." style="width: 100%; height: auto;">
-
-          <h3 class="title is-4">Accelerated MRI Reconstruction</h3>
-          <img src="./static/images/mri_figure.png" alt="Qualitative MRI reconstruction comparison showing ground truth and reconstructions from DPS, DAPS, DDS, Score-Med, and CLAMP." style="width: 100%; height: auto;">
-          <p>
-            CLAMP also extends beyond natural-image inverse problems. On multi-coil accelerated MRI reconstruction with Poisson-disc undersampling, it obtains the best PSNR and SSIM among the compared diffusion-based baselines at both acceleration factors.
-          </p>
-
-          <h3 class="title is-4">Qualitative Results</h3>
-          <img src="./static/images/main_figure.jpg" alt="CLAMP qualitative results on multiple inverse-problem tasks." style="width: 100%; height: auto;">
-          <p>
-            The visual comparisons highlight CLAMP across pixel and latent variants, linear and nonlinear forward models, and natural and medical imaging domains. The method reduces artifacts while preserving measurement consistency and perceptual fidelity.
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="section" id="BibTeX">
+</header>
+<main>
+<section class="section section-intro" id="overview" aria-labelledby="overview-heading">
   <div class="container is-max-desktop content">
-    <h2 class="title">BibTeX</h2>
-    <pre><code>@inproceedings{shin2026clamp,
+    <h2 class="title is-3" id="overview-heading">When should you consider CLAMP?</h2>
+    <p><strong>CLAMP (Curvature-aware Langevin with Aligned Manifold Pullback)</strong> is a training-free inverse-problem solver using a pretrained diffusion prior. It supports a common correction framework in pixel and latent spaces. Consider it as a baseline when comparing reconstruction quality and runtime for linear or differentiable nonlinear measurement operators.</p>
+    <div class="columns applicability-grid">
+      <div class="column"><h3 class="title is-5">A pretrained image prior</h3><p>Start with a diffusion denoiser suited to your image domain. Training-free refers to solving the inverse problem; the prior is already trained.</p></div>
+      <div class="column"><h3 class="title is-5">A differentiable measurement model</h3><p>The correction uses operator Jacobian actions and a denoiser pullback. Latent reconstruction also differentiates through the decoder.</p></div>
+      <div class="column"><h3 class="title is-5">A CUDA GPU</h3><p>The public entry point requires an NVIDIA GPU. The verified first run uses a 24 GB RTX 4090; memory and runtime depend on the prior and task.</p></div>
+    </div>
+    <div class="scope-note"><strong>Paper and code scope.</strong> The paper evaluates natural-image reconstruction and accelerated MRI. Release v0.1.0 verifies one FFHQ pixel-space super-resolution run. Latent presets are present, but a complete tested latent installation and MRI reproduction pipeline are not packaged in this release. <a href="#reproduce">See the execution status.</a></div>
+    <figure class="research-figure">
+      <img src="./static/images/main_figure.jpg" alt="Author-reported qualitative comparisons for CLAMP across phase retrieval, HDR, super-resolution, inpainting, and accelerated MRI." fetchpriority="high" decoding="async">
+      <figcaption>Qualitative results reported in the paper. The natural-image and MRI panels use their respective experimental setups.</figcaption>
+    </figure>
+  </div>
+</section>
+<section class="section soft-section" id="method" aria-labelledby="method-heading">
+  <div class="container is-max-desktop content">
+    <h2 class="title is-3" id="method-heading">How CLAMP changes diffusion guidance</h2>
+    <p>Scalar likelihood guidance applies a single weight to a data-consistency direction. CLAMP instead computes a geometry-aware correction in the noisy diffusion state, using a one-sided curvature approximation and damping aligned with the denoiser residual.</p>
+    <ol class="method-steps">
+      <li><strong>Pull back measurement sensitivity.</strong> Query the denoiser and map the measurement residual through the operator and denoiser into diffusion-state coordinates.</li>
+      <li><strong>Solve a damped curvature system.</strong> Use fixed-budget, matrix-free GMRES and manifold-aligned damping to scale the correction by direction.</li>
+      <li><strong>Advance the noise schedule.</strong> Apply a variance-preserving Langevin transition with a closed-form drift/noise split.</li>
+    </ol>
+    <figure class="research-figure">
+      <img src="./static/images/method_figure.jpg" alt="CLAMP's three stages: denoiser query and measurement residual, curvature correction through GMRES, and variance-preserving diffusion transition." loading="lazy" decoding="async">
+      <figcaption>In latent space, the measurement model is composed with the decoder. <a href="https://arxiv.org/html/2605.27990v1#S3">Method, assumptions, and derivation in Section 3.</a></figcaption>
+    </figure>
+  </div>
+</section>
+<section class="section" id="results" aria-labelledby="results-heading">
+  <div class="container is-max-desktop content">
+    <h2 class="title is-3" id="results-heading">Reconstruction quality and runtime</h2>
+    <p class="evidence-label">Author-reported paper results · arXiv v1, Tables 1 and 3</p>
+    <p>The tables below transcribe the paper's natural-image comparisons into selectable text. They are paper results, not new runs or independent replications. Each table reports 100 validation images at 256 × 256 on one NVIDIA RTX 6000 Ada Generation GPU, with batch size 1. Higher PSNR/SSIM and lower LPIPS/runtime are better.</p>
+    <p>Pixel priors are the FFHQ model from DPS and the ImageNet model from Dhariwal &amp; Nichol. Latent experiments use LDM-VQ4 priors as described in the paper. Exact checkpoint hashes and image IDs are not supplied by these tables. The release's ImageNet latent conditioning configuration still needs to be reconciled with the paper's unconditional-prior description before claiming reproduction.</p>
+    <p>The physical measurement noise and solver calibration are distinct: the release's natural-image presets use noise standard deviation 0.05, while CLAMP's data-consistency calibration is 0.01 and identity damping is 2.0. See <a href="https://arxiv.org/html/2605.27990v1#A3">Appendix C</a> for the noise protocol and method-specific baseline settings. These comparisons do not impose equal iteration budgets.</p>
+    <details class="protocol-details">
+      <summary>CLAMP compute budgets and interpretation</summary>
+      <div class="table-scroll" tabindex="0" role="region" aria-label="CLAMP compute budgets">
+        <table class="table is-fullwidth budget-table">
+          <caption>Diffusion steps T / GMRES iterations K (paper Table 4)</caption>
+          <thead><tr><th scope="col">Representation</th><th scope="col">Linear tasks</th><th scope="col">Phase retrieval</th><th scope="col">Nonlinear blur</th><th scope="col">HDR</th></tr></thead>
+          <tbody><tr><th scope="row">Pixel</th><td>50 / 5</td><td>250 / 4</td><td>50 / 20</td><td>250 / 4</td></tr><tr><th scope="row">Latent</th><td>25 / 20</td><td>250 / 5</td><td>75 / 20</td><td>250 / 5</td></tr></tbody>
+        </table>
+      </div>
+      <p>Times are transcribed as reported in the paper. Consult Appendix C.2 for each baseline's settings, and retain task/noise settings, checkpoint identity, backend, and evaluation protocol in any new comparison.</p>
+    </details>
+    <h3 class="title is-4">Pixel-space comparisons</h3>
+    <p>All rows from <a href="https://arxiv.org/html/2605.27990v1#S3.T1">Table 1</a>, separated by dataset.</p>
+    <details class="results-details" open><summary>FFHQ · Pixel · 100 images</summary>
+<div class="table-scroll" tabindex="0" role="region" aria-label="FFHQ · Pixel · 100 images results"><table class="table is-fullwidth results-table"><caption>FFHQ pixel-space results, paper Table 1. Author-reported; runtime in seconds.</caption>
+<thead><tr><th scope="col">Task</th><th scope="col">Method</th><th scope="col">PSNR ↑</th><th scope="col">SSIM ↑</th><th scope="col">LPIPS ↓</th><th scope="col">Time (s) ↓</th></tr></thead><tbody>
+<tr class="task-start clamp-row"><td>4× super-resolution</td><th scope="row">CLAMP</th><td>29.515</td><td>0.841</td><td>0.219</td><td>6.743</td></tr>
+<tr class=""><td>4× super-resolution</td><th scope="row">DAPS</th><td>28.619</td><td>0.764</td><td>0.262</td><td>28.257</td></tr>
+<tr class=""><td>4× super-resolution</td><th scope="row">SITCOM</th><td>29.153</td><td>0.826</td><td>0.231</td><td>15.755</td></tr>
+<tr class=""><td>4× super-resolution</td><th scope="row">DMPlug</th><td>28.637</td><td>0.797</td><td>0.253</td><td>118.255</td></tr>
+<tr class=""><td>4× super-resolution</td><th scope="row">DCDP</th><td>27.611</td><td>0.785</td><td>0.225</td><td>4.719</td></tr>
+<tr class="task-start clamp-row"><td>Box inpainting</td><th scope="row">CLAMP</th><td>25.495</td><td>0.882</td><td>0.125</td><td>6.175</td></tr>
+<tr class=""><td>Box inpainting</td><th scope="row">DAPS</th><td>24.285</td><td>0.746</td><td>0.222</td><td>22.352</td></tr>
+<tr class=""><td>Box inpainting</td><th scope="row">SITCOM</th><td>25.275</td><td>0.831</td><td>0.179</td><td>17.697</td></tr>
+<tr class=""><td>Box inpainting</td><th scope="row">DMPlug</th><td>23.526</td><td>0.790</td><td>0.281</td><td>103.76</td></tr>
+<tr class=""><td>Box inpainting</td><th scope="row">DCDP</th><td>21.721</td><td>0.766</td><td>0.219</td><td>8.147</td></tr>
+<tr class="task-start clamp-row"><td>Random inpainting</td><th scope="row">CLAMP</th><td>32.955</td><td>0.918</td><td>0.140</td><td>6.171</td></tr>
+<tr class=""><td>Random inpainting</td><th scope="row">DAPS</th><td>30.078</td><td>0.791</td><td>0.214</td><td>21.576</td></tr>
+<tr class=""><td>Random inpainting</td><th scope="row">SITCOM</th><td>31.431</td><td>0.871</td><td>0.173</td><td>25.382</td></tr>
+<tr class=""><td>Random inpainting</td><th scope="row">DMPlug</th><td>30.825</td><td>0.865</td><td>0.231</td><td>122.143</td></tr>
+<tr class=""><td>Random inpainting</td><th scope="row">DCDP</th><td>27.240</td><td>0.788</td><td>0.229</td><td>8.130</td></tr>
+<tr class="task-start clamp-row"><td>Gaussian deblurring</td><th scope="row">CLAMP</th><td>29.010</td><td>0.827</td><td>0.234</td><td>6.343</td></tr>
+<tr class=""><td>Gaussian deblurring</td><th scope="row">DAPS</th><td>28.762</td><td>0.767</td><td>0.254</td><td>37.730</td></tr>
+<tr class=""><td>Gaussian deblurring</td><th scope="row">SITCOM</th><td>29.359</td><td>0.826</td><td>0.236</td><td>25.491</td></tr>
+<tr class=""><td>Gaussian deblurring</td><th scope="row">DMPlug</th><td>27.95</td><td>0.770</td><td>0.278</td><td>181.695</td></tr>
+<tr class=""><td>Gaussian deblurring</td><th scope="row">DCDP</th><td>27.553</td><td>0.761</td><td>0.245</td><td>4.934</td></tr>
+<tr class="task-start clamp-row"><td>Motion deblurring</td><th scope="row">CLAMP</th><td>31.641</td><td>0.880</td><td>0.183</td><td>6.322</td></tr>
+<tr class=""><td>Motion deblurring</td><th scope="row">DAPS</th><td>30.954</td><td>0.823</td><td>0.202</td><td>38.606</td></tr>
+<tr class=""><td>Motion deblurring</td><th scope="row">SITCOM</th><td>31.501</td><td>0.866</td><td>0.167</td><td>26.184</td></tr>
+<tr class=""><td>Motion deblurring</td><th scope="row">DMPlug</th><td>29.272</td><td>0.818</td><td>0.260</td><td>152.699</td></tr>
+<tr class=""><td>Motion deblurring</td><th scope="row">DCDP</th><td>25.468</td><td>0.566</td><td>0.365</td><td>5.007</td></tr>
+<tr class="task-start clamp-row"><td>Phase retrieval</td><th scope="row">CLAMP</th><td>30.233</td><td>0.854</td><td>0.192</td><td>28.660</td></tr>
+<tr class=""><td>Phase retrieval</td><th scope="row">DAPS</th><td>30.103</td><td>0.796</td><td>0.208</td><td>98.054</td></tr>
+<tr class=""><td>Phase retrieval</td><th scope="row">SITCOM</th><td>28.782</td><td>0.791</td><td>0.239</td><td>24.584</td></tr>
+<tr class=""><td>Phase retrieval</td><th scope="row">DCDP</th><td>24.036</td><td>0.677</td><td>0.310</td><td>102.386</td></tr>
+<tr class="task-start clamp-row"><td>Nonlinear deblurring</td><th scope="row">CLAMP</th><td>29.961</td><td>0.856</td><td>0.166</td><td>33.946</td></tr>
+<tr class=""><td>Nonlinear deblurring</td><th scope="row">DAPS</th><td>28.868</td><td>0.780</td><td>0.223</td><td>755.725</td></tr>
+<tr class=""><td>Nonlinear deblurring</td><th scope="row">SITCOM</th><td>29.519</td><td>0.812</td><td>0.207</td><td>27.167</td></tr>
+<tr class=""><td>Nonlinear deblurring</td><th scope="row">DMPlug</th><td>28.298</td><td>0.811</td><td>0.249</td><td>291.221</td></tr>
+<tr class=""><td>Nonlinear deblurring</td><th scope="row">DCDP</th><td>27.879</td><td>0.795</td><td>0.204</td><td>269.786</td></tr>
+<tr class="task-start clamp-row"><td>High dynamic range</td><th scope="row">CLAMP</th><td>29.488</td><td>0.891</td><td>0.133</td><td>26.610</td></tr>
+<tr class=""><td>High dynamic range</td><th scope="row">DAPS</th><td>27.149</td><td>0.834</td><td>0.196</td><td>76.724</td></tr>
+<tr class=""><td>High dynamic range</td><th scope="row">SITCOM</th><td>27.205</td><td>0.777</td><td>0.226</td><td>33.887</td></tr>
+<tr class=""><td>High dynamic range</td><th scope="row">DMPlug</th><td>25.507</td><td>0.777</td><td>0.264</td><td>221.418</td></tr>
+</tbody></table></div></details>
+<details class="results-details"><summary>ImageNet · Pixel · 100 images</summary>
+<div class="table-scroll" tabindex="0" role="region" aria-label="ImageNet · Pixel · 100 images results"><table class="table is-fullwidth results-table"><caption>ImageNet pixel-space results, paper Table 1. Author-reported; runtime in seconds.</caption>
+<thead><tr><th scope="col">Task</th><th scope="col">Method</th><th scope="col">PSNR ↑</th><th scope="col">SSIM ↑</th><th scope="col">LPIPS ↓</th><th scope="col">Time (s) ↓</th></tr></thead><tbody>
+<tr class="task-start clamp-row"><td>4× super-resolution</td><th scope="row">CLAMP</th><td>26.981</td><td>0.742</td><td>0.290</td><td>23.587</td></tr>
+<tr class=""><td>4× super-resolution</td><th scope="row">DAPS</th><td>25.512</td><td>0.636</td><td>0.374</td><td>65.580</td></tr>
+<tr class=""><td>4× super-resolution</td><th scope="row">SITCOM</th><td>26.519</td><td>0.716</td><td>0.309</td><td>60.778</td></tr>
+<tr class=""><td>4× super-resolution</td><th scope="row">DMPlug</th><td>25.091</td><td>0.660</td><td>0.347</td><td>238.433</td></tr>
+<tr class=""><td>4× super-resolution</td><th scope="row">DCDP</th><td>24.358</td><td>0.640</td><td>0.369</td><td>9.190</td></tr>
+<tr class="task-start clamp-row"><td>Box inpainting</td><th scope="row">CLAMP</th><td>21.547</td><td>0.825</td><td>0.188</td><td>23.427</td></tr>
+<tr class=""><td>Box inpainting</td><th scope="row">DAPS</th><td>21.234</td><td>0.720</td><td>0.270</td><td>57.108</td></tr>
+<tr class=""><td>Box inpainting</td><th scope="row">SITCOM</th><td>20.698</td><td>0.726</td><td>0.241</td><td>66.709</td></tr>
+<tr class=""><td>Box inpainting</td><th scope="row">DMPlug</th><td>19.455</td><td>0.667</td><td>0.384</td><td>253.946</td></tr>
+<tr class=""><td>Box inpainting</td><th scope="row">DCDP</th><td>17.741</td><td>0.662</td><td>0.301</td><td>17.214</td></tr>
+<tr class="task-start clamp-row"><td>Random inpainting</td><th scope="row">CLAMP</th><td>30.215</td><td>0.866</td><td>0.159</td><td>23.419</td></tr>
+<tr class=""><td>Random inpainting</td><th scope="row">DAPS</th><td>27.350</td><td>0.721</td><td>0.251</td><td>56.932</td></tr>
+<tr class=""><td>Random inpainting</td><th scope="row">SITCOM</th><td>29.008</td><td>0.821</td><td>0.183</td><td>95.962</td></tr>
+<tr class=""><td>Random inpainting</td><th scope="row">DMPlug</th><td>27.023</td><td>0.739</td><td>0.317</td><td>248.146</td></tr>
+<tr class=""><td>Random inpainting</td><th scope="row">DCDP</th><td>23.284</td><td>0.606</td><td>0.355</td><td>17.518</td></tr>
+<tr class="task-start clamp-row"><td>Gaussian deblurring</td><th scope="row">CLAMP</th><td>26.388</td><td>0.710</td><td>0.333</td><td>23.924</td></tr>
+<tr class=""><td>Gaussian deblurring</td><th scope="row">DAPS</th><td>25.932</td><td>0.655</td><td>0.355</td><td>74.984</td></tr>
+<tr class=""><td>Gaussian deblurring</td><th scope="row">SITCOM</th><td>26.741</td><td>0.719</td><td>0.315</td><td>95.161</td></tr>
+<tr class=""><td>Gaussian deblurring</td><th scope="row">DMPlug</th><td>24.082</td><td>0.613</td><td>0.389</td><td>313.680</td></tr>
+<tr class=""><td>Gaussian deblurring</td><th scope="row">DCDP</th><td>23.499</td><td>0.542</td><td>0.449</td><td>9.573</td></tr>
+<tr class="task-start clamp-row"><td>Motion deblurring</td><th scope="row">CLAMP</th><td>29.141</td><td>0.812</td><td>0.243</td><td>23.805</td></tr>
+<tr class=""><td>Motion deblurring</td><th scope="row">DAPS</th><td>28.623</td><td>0.764</td><td>0.246</td><td>78.000</td></tr>
+<tr class=""><td>Motion deblurring</td><th scope="row">SITCOM</th><td>29.321</td><td>0.811</td><td>0.213</td><td>95.529</td></tr>
+<tr class=""><td>Motion deblurring</td><th scope="row">DMPlug</th><td>25.211</td><td>0.660</td><td>0.365</td><td>284.413</td></tr>
+<tr class=""><td>Motion deblurring</td><th scope="row">DCDP</th><td>17.771</td><td>0.248</td><td>0.574</td><td>9.488</td></tr>
+<tr class="task-start clamp-row"><td>Phase retrieval</td><th scope="row">CLAMP</th><td>19.680</td><td>0.459</td><td>0.478</td><td>104.628</td></tr>
+<tr class=""><td>Phase retrieval</td><th scope="row">DAPS</th><td>22.354</td><td>0.519</td><td>0.402</td><td>241.113</td></tr>
+<tr class=""><td>Phase retrieval</td><th scope="row">SITCOM</th><td>18.481</td><td>0.383</td><td>0.524</td><td>94.187</td></tr>
+<tr class=""><td>Phase retrieval</td><th scope="row">DCDP</th><td>15.953</td><td>0.283</td><td>0.595</td><td>195.193</td></tr>
+<tr class="task-start clamp-row"><td>Nonlinear deblurring</td><th scope="row">CLAMP</th><td>28.036</td><td>0.788</td><td>0.212</td><td>82.427</td></tr>
+<tr class=""><td>Nonlinear deblurring</td><th scope="row">DAPS</th><td>27.537</td><td>0.734</td><td>0.266</td><td>884.119</td></tr>
+<tr class=""><td>Nonlinear deblurring</td><th scope="row">SITCOM</th><td>28.097</td><td>0.774</td><td>0.221</td><td>97.029</td></tr>
+<tr class=""><td>Nonlinear deblurring</td><th scope="row">DMPlug</th><td>25.086</td><td>0.679</td><td>0.317</td><td>668.641</td></tr>
+<tr class=""><td>Nonlinear deblurring</td><th scope="row">DCDP</th><td>25.726</td><td>0.664</td><td>0.280</td><td>367.695</td></tr>
+<tr class="task-start clamp-row"><td>High dynamic range</td><th scope="row">CLAMP</th><td>28.804</td><td>0.886</td><td>0.136</td><td>104.38</td></tr>
+<tr class=""><td>High dynamic range</td><th scope="row">DAPS</th><td>26.568</td><td>0.819</td><td>0.198</td><td>216.701</td></tr>
+<tr class=""><td>High dynamic range</td><th scope="row">SITCOM</th><td>26.449</td><td>0.774</td><td>0.222</td><td>129.681</td></tr>
+<tr class=""><td>High dynamic range</td><th scope="row">DMPlug</th><td>23.244</td><td>0.715</td><td>0.308</td><td>564.501</td></tr>
+</tbody></table></div></details>
+    <h3 class="title is-4">Latent-space comparisons</h3>
+    <p>All rows from <a href="https://arxiv.org/html/2605.27990v1#A2.T3">Table 3</a>, separated by dataset. These use different priors from the pixel tables.</p>
+    <details class="results-details"><summary>FFHQ · Latent · 100 images</summary>
+<div class="table-scroll" tabindex="0" role="region" aria-label="FFHQ · Latent · 100 images results"><table class="table is-fullwidth results-table"><caption>FFHQ latent-space results, paper Table 3. Author-reported; runtime in seconds.</caption>
+<thead><tr><th scope="col">Task</th><th scope="col">Method</th><th scope="col">PSNR ↑</th><th scope="col">SSIM ↑</th><th scope="col">LPIPS ↓</th><th scope="col">Time (s) ↓</th></tr></thead><tbody>
+<tr class="task-start clamp-row"><td>4× super-resolution</td><th scope="row">CLAMP</th><td>28.933</td><td>0.829</td><td>0.233</td><td>34.255</td></tr>
+<tr class=""><td>4× super-resolution</td><th scope="row">PSLD</th><td>24.627</td><td>0.628</td><td>0.377</td><td>69.290</td></tr>
+<tr class=""><td>4× super-resolution</td><th scope="row">ReSample</th><td>23.317</td><td>0.456</td><td>0.507</td><td>300.061</td></tr>
+<tr class=""><td>4× super-resolution</td><th scope="row">LatentDAPS</th><td>29.204</td><td>0.825</td><td>0.272</td><td>84.460</td></tr>
+<tr class="task-start clamp-row"><td>Box inpainting</td><th scope="row">CLAMP</th><td>25.151</td><td>0.837</td><td>0.236</td><td>35.369</td></tr>
+<tr class=""><td>Box inpainting</td><th scope="row">PSLD</th><td>21.847</td><td>0.612</td><td>0.370</td><td>69.045</td></tr>
+<tr class=""><td>Box inpainting</td><th scope="row">ReSample</th><td>19.978</td><td>0.796</td><td>0.247</td><td>296.326</td></tr>
+<tr class=""><td>Box inpainting</td><th scope="row">LatentDAPS</th><td>23.474</td><td>0.742</td><td>0.369</td><td>85.823</td></tr>
+<tr class="task-start clamp-row"><td>Random inpainting</td><th scope="row">CLAMP</th><td>31.433</td><td>0.894</td><td>0.193</td><td>35.263</td></tr>
+<tr class=""><td>Random inpainting</td><th scope="row">PSLD</th><td>24.280</td><td>0.635</td><td>0.346</td><td>68.915</td></tr>
+<tr class=""><td>Random inpainting</td><th scope="row">ReSample</th><td>29.950</td><td>0.842</td><td>0.201</td><td>307.874</td></tr>
+<tr class=""><td>Random inpainting</td><th scope="row">LatentDAPS</th><td>26.036</td><td>0.743</td><td>0.385</td><td>85.840</td></tr>
+<tr class="task-start clamp-row"><td>Gaussian deblurring</td><th scope="row">CLAMP</th><td>28.269</td><td>0.801</td><td>0.272</td><td>35.011</td></tr>
+<tr class=""><td>Gaussian deblurring</td><th scope="row">PSLD</th><td>22.015</td><td>0.503</td><td>0.444</td><td>70.098</td></tr>
+<tr class=""><td>Gaussian deblurring</td><th scope="row">ReSample</th><td>26.357</td><td>0.662</td><td>0.329</td><td>355.885</td></tr>
+<tr class=""><td>Gaussian deblurring</td><th scope="row">LatentDAPS</th><td>25.717</td><td>0.732</td><td>0.384</td><td>87.407</td></tr>
+<tr class="task-start clamp-row"><td>Motion deblurring</td><th scope="row">CLAMP</th><td>29.959</td><td>0.840</td><td>0.244</td><td>36.185</td></tr>
+<tr class=""><td>Motion deblurring</td><th scope="row">PSLD</th><td>24.416</td><td>0.603</td><td>0.346</td><td>70.041</td></tr>
+<tr class=""><td>Motion deblurring</td><th scope="row">ReSample</th><td>28.744</td><td>0.754</td><td>0.262</td><td>347.756</td></tr>
+<tr class=""><td>Motion deblurring</td><th scope="row">LatentDAPS</th><td>26.646</td><td>0.757</td><td>0.361</td><td>87.409</td></tr>
+<tr class="task-start clamp-row"><td>Phase retrieval</td><th scope="row">CLAMP</th><td>28.194</td><td>0.802</td><td>0.271</td><td>133.941</td></tr>
+<tr class=""><td>Phase retrieval</td><th scope="row">ReSample</th><td>24.676</td><td>0.606</td><td>0.412</td><td>320.911</td></tr>
+<tr class=""><td>Phase retrieval</td><th scope="row">LatentDAPS</th><td>23.199</td><td>0.692</td><td>0.421</td><td>177.730</td></tr>
+<tr class="task-start clamp-row"><td>Nonlinear deblurring</td><th scope="row">CLAMP</th><td>29.243</td><td>0.836</td><td>0.243</td><td>146.718</td></tr>
+<tr class=""><td>Nonlinear deblurring</td><th scope="row">ReSample</th><td>28.748</td><td>0.797</td><td>0.236</td><td>843.212</td></tr>
+<tr class=""><td>Nonlinear deblurring</td><th scope="row">LatentDAPS</th><td>25.152</td><td>0.726</td><td>0.387</td><td>194.014</td></tr>
+<tr class="task-start clamp-row"><td>High dynamic range</td><th scope="row">CLAMP</th><td>26.245</td><td>0.816</td><td>0.279</td><td>134.060</td></tr>
+<tr class=""><td>High dynamic range</td><th scope="row">ReSample</th><td>25.038</td><td>0.822</td><td>0.239</td><td>291.372</td></tr>
+<tr class=""><td>High dynamic range</td><th scope="row">LatentDAPS</th><td>20.789</td><td>0.630</td><td>0.512</td><td>174.976</td></tr>
+</tbody></table></div></details>
+<details class="results-details"><summary>ImageNet · Latent · 100 images</summary>
+<div class="table-scroll" tabindex="0" role="region" aria-label="ImageNet · Latent · 100 images results"><table class="table is-fullwidth results-table"><caption>ImageNet latent-space results, paper Table 3. Author-reported; runtime in seconds.</caption>
+<thead><tr><th scope="col">Task</th><th scope="col">Method</th><th scope="col">PSNR ↑</th><th scope="col">SSIM ↑</th><th scope="col">LPIPS ↓</th><th scope="col">Time (s) ↓</th></tr></thead><tbody>
+<tr class="task-start clamp-row"><td>4× super-resolution</td><th scope="row">CLAMP</th><td>26.465</td><td>0.726</td><td>0.335</td><td>37.353</td></tr>
+<tr class=""><td>4× super-resolution</td><th scope="row">PSLD</th><td>16.656</td><td>0.291</td><td>0.541</td><td>102.757</td></tr>
+<tr class=""><td>4× super-resolution</td><th scope="row">ReSample</th><td>22.152</td><td>0.423</td><td>0.470</td><td>269.078</td></tr>
+<tr class=""><td>4× super-resolution</td><th scope="row">LatentDAPS</th><td>26.189</td><td>0.702</td><td>0.388</td><td>86.315</td></tr>
+<tr class="task-start clamp-row"><td>Box inpainting</td><th scope="row">CLAMP</th><td>20.836</td><td>0.731</td><td>0.342</td><td>37.393</td></tr>
+<tr class=""><td>Box inpainting</td><th scope="row">PSLD</th><td>18.762</td><td>0.424</td><td>0.549</td><td>99.832</td></tr>
+<tr class=""><td>Box inpainting</td><th scope="row">ReSample</th><td>18.087</td><td>0.713</td><td>0.309</td><td>265.139</td></tr>
+<tr class=""><td>Box inpainting</td><th scope="row">LatentDAPS</th><td>22.818</td><td>0.561</td><td>0.543</td><td>88.725</td></tr>
+<tr class="task-start clamp-row"><td>Random inpainting</td><th scope="row">CLAMP</th><td>28.181</td><td>0.806</td><td>0.262</td><td>37.396</td></tr>
+<tr class=""><td>Random inpainting</td><th scope="row">PSLD</th><td>20.690</td><td>0.436</td><td>0.550</td><td>98.449</td></tr>
+<tr class=""><td>Random inpainting</td><th scope="row">ReSample</th><td>26.916</td><td>0.756</td><td>0.255</td><td>323.283</td></tr>
+<tr class=""><td>Random inpainting</td><th scope="row">LatentDAPS</th><td>19.630</td><td>0.588</td><td>0.522</td><td>86.092</td></tr>
+<tr class="task-start clamp-row"><td>Gaussian deblurring</td><th scope="row">CLAMP</th><td>25.443</td><td>0.662</td><td>0.411</td><td>38.110</td></tr>
+<tr class=""><td>Gaussian deblurring</td><th scope="row">PSLD</th><td>19.591</td><td>0.329</td><td>0.555</td><td>109.263</td></tr>
+<tr class=""><td>Gaussian deblurring</td><th scope="row">ReSample</th><td>23.530</td><td>0.497</td><td>0.439</td><td>338.281</td></tr>
+<tr class=""><td>Gaussian deblurring</td><th scope="row">LatentDAPS</th><td>22.695</td><td>0.567</td><td>0.549</td><td>86.016</td></tr>
+<tr class="task-start clamp-row"><td>Motion deblurring</td><th scope="row">CLAMP</th><td>27.119</td><td>0.730</td><td>0.348</td><td>38.118</td></tr>
+<tr class=""><td>Motion deblurring</td><th scope="row">PSLD</th><td>20.761</td><td>0.376</td><td>0.518</td><td>98.400</td></tr>
+<tr class=""><td>Motion deblurring</td><th scope="row">ReSample</th><td>24.845</td><td>0.579</td><td>0.404</td><td>347.756</td></tr>
+<tr class=""><td>Motion deblurring</td><th scope="row">LatentDAPS</th><td>23.557</td><td>0.592</td><td>0.513</td><td>89.050</td></tr>
+<tr class="task-start clamp-row"><td>Phase retrieval</td><th scope="row">CLAMP</th><td>20.133</td><td>0.483</td><td>0.458</td><td>119.078</td></tr>
+<tr class=""><td>Phase retrieval</td><th scope="row">ReSample</th><td>16.913</td><td>0.320</td><td>0.608</td><td>319.601</td></tr>
+<tr class=""><td>Phase retrieval</td><th scope="row">LatentDAPS</th><td>17.067</td><td>0.446</td><td>0.624</td><td>192.787</td></tr>
+<tr class="task-start clamp-row"><td>Nonlinear deblurring</td><th scope="row">CLAMP</th><td>25.889</td><td>0.716</td><td>0.325</td><td>158.452</td></tr>
+<tr class=""><td>Nonlinear deblurring</td><th scope="row">ReSample</th><td>26.047</td><td>0.697</td><td>0.301</td><td>686.128</td></tr>
+<tr class=""><td>Nonlinear deblurring</td><th scope="row">LatentDAPS</th><td>22.516</td><td>0.568</td><td>0.530</td><td>198.074</td></tr>
+<tr class="task-start clamp-row"><td>High dynamic range</td><th scope="row">CLAMP</th><td>28.885</td><td>0.887</td><td>0.130</td><td>117.544</td></tr>
+<tr class=""><td>High dynamic range</td><th scope="row">ReSample</th><td>24.950</td><td>0.783</td><td>0.257</td><td>273.695</td></tr>
+<tr class=""><td>High dynamic range</td><th scope="row">LatentDAPS</th><td>19.394</td><td>0.469</td><td>0.641</td><td>180.929</td></tr>
+</tbody></table></div></details>
+    <details class="figure-details"><summary>View the original paper table figures</summary>
+      <figure class="research-figure"><img src="./static/images/pixel_table.png" alt="Original paper Table 1, pixel-space results transcribed above." loading="lazy" decoding="async"><figcaption>Pixel-space table.</figcaption></figure>
+      <figure class="research-figure"><img src="./static/images/latent_table.png" alt="Original paper Table 3, latent-space results transcribed above." loading="lazy" decoding="async"><figcaption>Latent-space table.</figcaption></figure>
+    </details>
+    <h3 class="title is-4" id="mri">Accelerated MRI in the paper</h3>
+    <p>The paper also reports multi-coil MRI reconstruction using Poisson-disc undersampling. Its MRI comparison is a separate experiment with a domain-specific prior. See <a href="https://arxiv.org/html/2605.27990v1#S4.SS3">Section 4.3</a> for quantitative results and the MRI appendix for the protocol. A complete MRI prior, data preparation, and reconstruction recipe are not included in v0.1.0.</p>
+    <figure class="research-figure"><img src="./static/images/mri_figure.png" alt="Author-reported MRI reconstructions comparing ground truth, DPS, DAPS, DDS, Score-Med, and CLAMP." loading="lazy" decoding="async"><figcaption>Author-reported qualitative MRI results, separate from the public natural-image quick start.</figcaption></figure>
+  </div>
+</section>
+<section class="section soft-section" id="comparison" aria-labelledby="comparison-heading">
+  <div class="container is-max-desktop content">
+    <h2 class="title is-3" id="comparison-heading">How does CLAMP compare?</h2>
+    <p>CLAMP contributes a different likelihood correction. DAPS uses decoupled noise annealing, SITCOM uses step-wise consistency optimization, DMPlug optimizes a diffusion input, and DCDP separates data consistency from diffusion purification. The paper's latent comparisons include LatentDAPS, ReSample, and PSLD. <a href="https://arxiv.org/html/2605.27990v1#A3.SS2">Compared implementations and settings.</a></p>
+    <div class="comparison-examples">
+      <article><h3 class="title is-5">A favorable quality/runtime case</h3><p>For FFHQ 4× super-resolution in Table 1, CLAMP reports 29.515 dB PSNR at 6.743 s; DAPS reports 28.619 dB at 28.257 s. DCDP is faster at 4.719 s, with 27.611 dB.</p></article>
+      <article><h3 class="title is-5">Speed depends on the task</h3><p>For FFHQ nonlinear deblurring, CLAMP reports 29.961 dB at 33.946 s. SITCOM is faster at 27.167 s and reports 29.519 dB. Use the accompanying SSIM and LPIPS values when judging quality.</p></article>
+      <article><h3 class="title is-5">Another solver can have better quality</h3><p>For ImageNet phase retrieval, DAPS reports better PSNR, SSIM, and LPIPS than CLAMP, with a longer runtime: 241.113 s versus 104.628 s.</p></article>
+    </div>
+    <h3 class="title is-4">Limitations and selection criteria</h3>
+    <ul>
+      <li>Choose a prior suited to the image domain and an operator whose required Jacobian actions are available.</li>
+      <li>Quality and runtime depend on the task, prior, noise, and solver budget. The tables support task-specific comparisons, not a universal ranking.</li>
+      <li>A local curvature approximation and a finite GMRES budget do not establish exact posterior sampling for arbitrary operators.</li>
+      <li>For methods and settings absent from the paper, this page provides no direct comparison. A matched experiment is needed.</li>
+    </ul>
+    <p>See the paper's <a href="https://arxiv.org/html/2605.27990v1#A6">limitations appendix</a> for further discussion.</p>
+  </div>
+</section>
+<section class="section" id="reproduce" aria-labelledby="reproduce-heading">
+  <div class="container is-max-desktop content">
+    <h2 class="title is-3" id="reproduce-heading">Run the public implementation</h2>
+    <p><a href="https://github.com/Seunghyeok0715/CLAMP/releases/tag/v0.1.0"><strong>CLAMP v0.1.0</strong></a> includes a pixel-space dependency manifest, setup checks, task commands, and documented outputs. Checkpoints and datasets are external downloads; they are not bundled with the source release.</p>
+    <ol>
+      <li>Follow the <a href="https://github.com/Seunghyeok0715/CLAMP/blob/v0.1.0/README.md#installation">installation and one-image quick start</a>: Python 3.11.9, PyTorch 2.3.0, torchvision 0.18.0, and CUDA 12.1 wheels.</li>
+      <li>Download the <a href="https://github.com/Seunghyeok0715/CLAMP/blob/v0.1.0/docs/assets.md">FFHQ DDPM checkpoint and test images</a>, then run the documented setup check.</li>
+      <li>Run 4× super-resolution with one image, T=50, K=5, seed 42, physical noise 0.05, and calibration 0.01. The Windows quick start uses <code>--cudnn false</code>.</li>
+      <li>Inspect the reconstructed image, ground-truth/measurement/reconstruction grid, <code>config.yaml</code>, <code>eval.md</code>, and <code>metrics.json</code>.</li>
+    </ol>
+    <div class="release-status">
+      <h3 class="title is-5">What has actually been verified?</h3>
+      <p><strong>Local execution check, 7 September 2026:</strong> one FFHQ pixel-space reconstruction on Windows/RTX 4090 completed with PSNR 31.1733 dB and SSIM 0.8641. This single-image result is separate from the 100-image paper tables and is not independent benchmark replication. <a href="https://github.com/Seunghyeok0715/CLAMP/blob/v0.1.0/docs/validation.md">Validation details.</a></p>
+      <p><strong>Still unverified in the public release:</strong> full 100-image evaluation, LPIPS/FID, ImageNet, nonlinear blur, a complete latent setup, and MRI reproduction. Additional latent dependencies and paper asset identities require confirmation.</p>
+    </div>
+    <p>To run another task, use the <a href="https://github.com/Seunghyeok0715/CLAMP/blob/v0.1.0/configs_clamp_cli.txt">published CLI configurations</a> and the <a href="https://github.com/Seunghyeok0715/CLAMP/blob/v0.1.0/docs/reproduction.md">reproduction guide</a>. Record image IDs, checkpoints, measurement settings, seed, GPU/backend, and the code version with new results.</p>
+  </div>
+</section>
+<section class="section soft-section" id="BibTeX" aria-labelledby="citation-heading">
+  <div class="container is-max-desktop content">
+    <h2 class="title is-3" id="citation-heading">Cite the ICML 2026 paper</h2>
+    <p>Please cite the conference paper when using CLAMP. The official title and author order are preserved. <a href="https://github.com/Seunghyeok0715/CLAMP/blob/v0.1.0/CITATION.cff">Machine-readable citation metadata.</a></p>
+    <button class="button is-small is-link is-light copy-button" type="button" data-copy="bibtex-code" hidden>Copy BibTeX</button>
+    <span id="copy-status" class="copy-status" role="status" aria-live="polite"></span>
+    <pre><code id="bibtex-code">@inproceedings{shin2026clamp,
   author    = {Seunghyeok Shin and Minwoo Kim and Dabin Kim and Hongki Lim},
   title     = {Geometry-Correct Diffusion Posterior Sampling with Denoiser-Pullback Curvature Guidance and Manifold-Aligned Damping},
   booktitle = {Proceedings of the 43rd International Conference on Machine Learning},
   series    = {Proceedings of Machine Learning Research},
   volume    = {306},
   year      = {2026},
-  publisher = {PMLR}
+  publisher = {PMLR},
+  url       = {https://icml.cc/virtual/2026/poster/60728}
 }</code></pre>
   </div>
 </section>
-
+</main>
 <footer class="footer">
-  <div class="container">
-    <div class="content has-text-centered">
-      <a class="icon-link" href="./static/pdfs/clamp.pdf">
-        <i class="fas fa-file-pdf"></i>
-      </a>
-      <a class="icon-link" href="https://github.com/Seunghyeok0715/CLAMP">
-        <i class="fab fa-github"></i>
-      </a>
-    </div>
-    <div class="columns is-centered">
-      <div class="column is-8">
-        <div class="content">
-          <p>
-            This website is licensed under a
-            <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">
-              Creative Commons Attribution-ShareAlike 4.0 International License
-            </a>.
-          </p>
-          <p>
-            This website template is adapted from the
-            <a href="https://github.com/nerfies/nerfies.github.io">Nerfies project page source</a>.
-            Please remove analytics or external integrations that are not needed for your deployment.
-          </p>
-        </div>
-      </div>
-    </div>
+  <div class="container is-max-desktop content has-text-centered">
+    <p><a href="https://arxiv.org/pdf/2605.27990">Paper</a> · <a href="https://github.com/Seunghyeok0715/CLAMP">Official code</a> · <a href="https://milab-inha.github.io/">Machine Intelligence Lab</a></p>
+    <p>This website is licensed under <a rel="license" href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>. The template is adapted from the <a href="https://github.com/nerfies/nerfies.github.io">Nerfies project page</a>.</p>
   </div>
 </footer>
-
 </body>
 </html>
-s://github.com/nerfies/nerfies.github.io">Nerfies project page source</a>.
-            Please remove analytics or external integrations that are not needed for your deployment.
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-</footer>github.com/nerfies/nerfies.github.io">Nerfies project page source</a>.
-            Please remove analytics or external integrations that are not needed for your deployment.
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-</footer>ithub.com/nerfies/nerfies.github.io">Nerfies project page source</a>.
-            Please remove analytics or external integrations that are not needed for your deployment.
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-</footer>
