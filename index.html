@@ -71,7 +71,7 @@
       <p class="equal-note"><sup>*</sup> Equal contribution.</p>
       <p class="hero-summary">Reconstruct images with a pretrained diffusion prior.<br>Account for measurement geometry at every noise level.</p>
       <div class="publication-links">
-        <a class="button is-link is-rounded" href="https://github.com/Seunghyeok0715/CLAMP/releases/tag/v0.1.0">Code · v0.1.0</a>
+        <a class="button is-link is-rounded" href="https://github.com/Seunghyeok0715/CLAMP/releases/tag/v0.1.0">Code</a>
         <a class="button is-dark is-rounded" href="https://arxiv.org/pdf/2605.27990">Paper PDF</a>
         <a class="button is-light is-rounded" href="https://icml.cc/virtual/2026/poster/60728">ICML</a>
         <a class="button is-light is-rounded" href="https://arxiv.org/abs/2605.27990">arXiv</a>
@@ -91,7 +91,6 @@
     <div class="columns applicability-grid">
       <div class="column"><h3 class="title is-5">A pretrained image prior</h3><p>Start with a diffusion denoiser suited to your image domain. Training-free refers to solving the inverse problem; the prior is already trained.</p></div>
       <div class="column"><h3 class="title is-5">A differentiable measurement model</h3><p>The correction uses operator Jacobian actions and a denoiser pullback. Latent reconstruction also differentiates through the decoder.</p></div>
-      <div class="column"><h3 class="title is-5">A CUDA GPU</h3><p>The public entry point requires an NVIDIA GPU. The verified first run uses a 24 GB RTX 4090; memory and runtime depend on the prior and task.</p></div>
     </div>
     <div class="scope-note"><strong>Paper and code scope.</strong> The paper evaluates natural-image reconstruction and accelerated MRI. Release v0.1.0 verifies one FFHQ pixel-space super-resolution run. Latent presets are present, but a complete tested latent installation and MRI reproduction pipeline are not packaged in this release. <a href="#reproduce">See the execution status.</a></div>
     <figure class="research-figure">
