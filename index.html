@@ -324,11 +324,6 @@
       <li>Run 4× super-resolution with one image, T=50, K=5, seed 42, physical noise 0.05, and calibration 0.01. The Windows quick start uses <code>--cudnn false</code>.</li>
       <li>Inspect the reconstructed image, ground-truth/measurement/reconstruction grid, <code>config.yaml</code>, <code>eval.md</code>, and <code>metrics.json</code>.</li>
     </ol>
-    <div class="release-status">
-      <h3 class="title is-5">What has actually been verified?</h3>
-      <p><strong>Local execution check, 7 September 2026:</strong> one FFHQ pixel-space reconstruction on Windows/RTX 4090 completed with PSNR 31.1733 dB and SSIM 0.8641. This single-image result is separate from the 100-image paper tables and is not independent benchmark replication. <a href="https://github.com/Seunghyeok0715/CLAMP/blob/v0.1.0/docs/validation.md">Validation details.</a></p>
-      <p><strong>Still unverified in the public release:</strong> full 100-image evaluation, LPIPS/FID, ImageNet, nonlinear blur, a complete latent setup, and MRI reproduction. Additional latent dependencies and paper asset identities require confirmation.</p>
-    </div>
     <p>To run another task, use the <a href="https://github.com/Seunghyeok0715/CLAMP/blob/v0.1.0/configs_clamp_cli.txt">published CLI configurations</a> and the <a href="https://github.com/Seunghyeok0715/CLAMP/blob/v0.1.0/docs/reproduction.md">reproduction guide</a>. Record image IDs, checkpoints, measurement settings, seed, GPU/backend, and the code version with new results.</p>
   </div>
 </section>
